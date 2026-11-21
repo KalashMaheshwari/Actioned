@@ -11,6 +11,10 @@ import {
   Bell,
   Sparkles,
 } from "lucide-react";
+import {
+  SynergyClusterIcon,
+  ChronoGaugeIcon,
+} from "@/components/Icons";
 
 interface MemberProfile {
   name: string;
@@ -51,8 +55,8 @@ export default function DigestPage() {
     <div className="space-y-8 pb-12">
       {/* Header */}
       <div className="space-y-2 pb-2">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-          Team Digest
+        <h1 className="font-claude-heading text-3xl sm:text-4xl font-medium text-white tracking-tight">
+          Team Weekly Digest
         </h1>
         <p className="text-sm text-[#9FA4B2]">
           Personalized briefings, open deliverables, and active decisions per person.

@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { Decision } from "@/lib/types";
 import { getDecisions } from "@/lib/api";
 import {
-  Search,
   Calendar,
   User,
   Loader2,
   BookOpen,
 } from "lucide-react";
+import {
+  VectorNexusIcon,
+  SearchReticleIcon,
+  ConflictPrismIcon,
+} from "@/components/Icons";
 
 export default function DecisionsPage() {
   const [decisions, setDecisions] = useState<Decision[]>([]);
@@ -45,18 +49,18 @@ export default function DecisionsPage() {
     <div className="space-y-8 pb-12">
       {/* Header */}
       <div className="space-y-2 pb-2">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <h1 className="font-claude-heading text-3xl sm:text-4xl font-medium text-white tracking-tight">
           Decision Memory
         </h1>
         <p className="text-sm text-[#9FA4B2]">
-          Persistent archive of all verified team consensus across meetings.
+          Persistent vector archive of all verified team consensus across meetings.
         </p>
       </div>
 
       {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <form onSubmit={handleSearchSubmit} className="flex-1 relative">
-          <Search className="w-4 h-4 text-[#6B707F] absolute left-4 top-3.5" />
+          <SearchReticleIcon className="w-4 h-4 text-[#6B707F] absolute left-4 top-3.5" />
           <input
             type="text"
             value={searchQuery}

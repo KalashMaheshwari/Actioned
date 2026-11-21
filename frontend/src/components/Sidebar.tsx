@@ -7,18 +7,20 @@ import { useEffect, useState, MouseEvent } from "react";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { checkBackendHealth, seedDemoData } from "@/lib/api";
 import {
-  Sparkles,
-  BookOpen,
-  Users,
   RotateCcw,
-  Search,
   ChevronLeft,
 } from "lucide-react";
+import {
+  IngestApertureIcon,
+  VectorNexusIcon,
+  SynergyClusterIcon,
+  SearchReticleIcon,
+} from "@/components/Icons";
 
 interface NavItem {
   href: string;
   label: string;
-  icon: typeof Sparkles;
+  icon: React.ComponentType<{ className?: string }>;
   badge: string;
 }
 
@@ -68,19 +70,19 @@ export function Sidebar() {
     {
       href: "/",
       label: "Ingest Meeting",
-      icon: Sparkles,
+      icon: IngestApertureIcon,
       badge: "Whisper",
     },
     {
       href: "/decisions",
       label: "Decision Memory",
-      icon: BookOpen,
+      icon: VectorNexusIcon,
       badge: "Vector",
     },
     {
       href: "/digest",
       label: "Team Digest",
-      icon: Users,
+      icon: SynergyClusterIcon,
       badge: "Weekly",
     },
   ];
@@ -205,7 +207,7 @@ export function Sidebar() {
                 className="overflow-hidden"
               >
                 <div className="relative">
-                  <Search className="w-3.5 h-3.5 text-[#6B707F] absolute left-3 top-2.5" />
+                  <SearchReticleIcon className="w-3.5 h-3.5 text-[#6B707F] absolute left-3 top-2.5" />
                   <input
                     type="text"
                     readOnly

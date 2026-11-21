@@ -13,6 +13,12 @@ import {
   Calendar,
   Volume2,
 } from "lucide-react";
+import {
+  IngestApertureIcon,
+  AcousticWaveIcon,
+  ConflictPrismIcon,
+  ChronoGaugeIcon,
+} from "@/components/Icons";
 
 export default function IngestPage() {
   const router = useRouter();
@@ -96,9 +102,9 @@ export default function IngestPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page Header (Workly Style) */}
+      {/* Page Header (Claude Editorial Style) */}
       <div className="space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <h1 className="font-claude-heading text-3xl sm:text-4xl text-white font-medium tracking-tight">
           Ingest Meeting
         </h1>
         <p className="text-sm text-[#9FA4B2] leading-relaxed max-w-xl">

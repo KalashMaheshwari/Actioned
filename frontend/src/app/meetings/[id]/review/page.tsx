@@ -20,6 +20,10 @@ import {
   ArrowRight,
   ShieldAlert,
 } from "lucide-react";
+import {
+  ConflictPrismIcon,
+  ChronoGaugeIcon,
+} from "@/components/Icons";
 
 function ReviewContent({
   params,
@@ -135,7 +139,7 @@ function ReviewContent({
   return (
     <div className="space-y-8 pb-28">
       {/* Header */}
-      <div className="space-y-2 border-b border-[#1E2028] pb-5">
+      <div className="space-y-2 pb-2">
         <button
           onClick={() => router.push("/")}
           className="text-xs font-mono text-[#858997] hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
@@ -145,7 +149,7 @@ function ReviewContent({
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="font-claude-heading text-3xl sm:text-4xl font-medium text-white tracking-tight">
             Review: {meetingMeta?.title || `Meeting #${meetingId}`}
           </h1>
           <div className="text-xs font-mono text-[#858997]">
@@ -194,7 +198,7 @@ function ReviewContent({
         <div className="rounded-3xl p-6 sm:p-7 space-y-5 bg-[#D47255] text-[#2A140E] shadow-2xl border-none">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5 font-extrabold text-xl">
-              <ShieldAlert className="w-6 h-6 text-[#2A140E]" />
+              <ConflictPrismIcon className="w-6 h-6 text-[#2A140E]" />
               <span>Consensus Contradiction Detected ({data.conflicts.length})</span>
             </div>
             <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider bg-[#2A140E] text-[#D47255] px-3 py-1 rounded-full">

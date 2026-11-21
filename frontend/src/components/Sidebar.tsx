@@ -74,52 +74,54 @@ export function Sidebar() {
         isCollapsed ? "w-20 p-3" : "w-64 p-5"
       }`}
     >
-      {/* Top Bar: Mac Dots + Collapse Button */}
+      {/* Header: Brand Logo & Collapse Toggle (Workly style) */}
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          {/* Mac Window Dots */}
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#FF5F56] inline-block" />
-            <span className="w-3 h-3 rounded-full bg-[#FFBD2E] inline-block" />
-            <span className="w-3 h-3 rounded-full bg-[#27C93F] inline-block" />
-          </div>
-
-          {/* Collapse / Expand Toggle */}
-          <button
-            type="button"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="w-7 h-7 rounded-full bg-[#1E2028] hover:bg-[#282A36] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-colors cursor-pointer border-none"
+        <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between px-1"}`}>
+          <Link
+            href="/"
+            className="flex items-center gap-3 transition-opacity"
           >
-            {isCollapsed ? (
-              <ChevronRight className="w-4 h-4" />
-            ) : (
-              <ChevronLeft className="w-4 h-4" />
+            <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-md">
+              A
+            </div>
+            {!isCollapsed && (
+              <div className="overflow-hidden">
+                <span className="font-bold text-lg text-white tracking-tight block">
+                  Actioned
+                </span>
+                <span className="text-[11px] text-[#858997] font-sans block truncate">
+                  Meeting Agent
+                </span>
+              </div>
             )}
-          </button>
+          </Link>
+
+          {/* Collapse Toggle Button */}
+          {!isCollapsed && (
+            <button
+              type="button"
+              onClick={() => setIsCollapsed(true)}
+              title="Collapse sidebar"
+              className="w-7 h-7 rounded-xl bg-[#1E2028] hover:bg-[#282A36] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-colors cursor-pointer border-none"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
-        {/* Brand Wordmark */}
-        <Link
-          href="/"
-          className={`flex items-center gap-3 transition-opacity ${
-            isCollapsed ? "justify-center" : "px-1"
-          }`}
-        >
-          <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-md">
-            A
+        {/* When collapsed, small expand button under logo */}
+        {isCollapsed && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => setIsCollapsed(false)}
+              title="Expand sidebar"
+              className="w-7 h-7 rounded-xl bg-[#1E2028] hover:bg-[#282A36] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-colors cursor-pointer border-none"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
-          {!isCollapsed && (
-            <div className="overflow-hidden">
-              <span className="font-bold text-lg text-white tracking-tight block">
-                Actioned
-              </span>
-              <span className="text-[11px] text-[#858997] font-sans block truncate">
-                Meeting Agent
-              </span>
-            </div>
-          )}
-        </Link>
+        )}
 
         {/* Search Mockup (Workly style) */}
         {!isCollapsed && (

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, MouseEvent } from "react";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
@@ -147,8 +148,15 @@ export function Sidebar() {
             suppressHydrationWarning
           >
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-lg shadow-[#D47255]/25">
-                A
+              <div className="w-9 h-9 rounded-2xl overflow-hidden shrink-0 shadow-lg shadow-[#D47255]/20 flex items-center justify-center bg-[#181A24]">
+                <Image
+                  src="/logo.webp"
+                  alt="Actioned Logo"
+                  width={36}
+                  height={36}
+                  className="w-full h-full object-cover select-none"
+                  priority
+                />
               </div>
               <AnimatePresence initial={false}>
                 {!collapsed && (

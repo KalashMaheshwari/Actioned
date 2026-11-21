@@ -201,7 +201,7 @@ function ReviewContent({
               <ConflictPrismIcon className="w-6 h-6 text-[#2A140E]" />
               <span>Consensus Contradiction Detected ({data.conflicts.length})</span>
             </div>
-            <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider bg-[#2A140E] text-[#D47255] px-3 py-1 rounded-full">
+            <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider text-[#2A140E]">
               Conflict Alert
             </span>
           </div>

@@ -112,18 +112,8 @@ export default function IngestPage() {
         </p>
       </div>
 
-      {/* Demo Scenario Quick-Loads */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-[#D47255] font-semibold bg-[#D47255]/10 px-2.5 py-1 rounded-full">
-            Demo Presets • Click to test PS 03 scenarios in 1-click
-          </span>
-          <span className="text-[11px] text-[#6B707F] font-mono hidden sm:inline">
-            Fast Verification Scenarios
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {/* 3 Demo Scenario Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Card 1 */}
           <button
             type="button"
@@ -199,7 +189,6 @@ export default function IngestPage() {
             </div>
           </button>
         </div>
-      </div>
 
       {/* Main Ingestion Form (Matte Card, Borderless) */}
       <form onSubmit={handleIngest} className="bg-[#15161C] rounded-3xl p-6 sm:p-8 space-y-6 border-none shadow-xl">

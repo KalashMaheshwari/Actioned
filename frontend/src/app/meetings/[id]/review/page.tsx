@@ -452,8 +452,8 @@ function ReviewContent({
 
       {/* Floating Bottom Docket Bar */}
       {!commitResult && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-3xl px-4 z-30">
-          <div className="p-4 rounded-3xl bg-[#15161C]/95 backdrop-blur-md shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 border-none">
+        <div className="fixed bottom-6 left-0 right-0 sm:left-28 lg:left-72 z-30 flex justify-center px-4 pointer-events-none">
+          <div className="w-full max-w-3xl pointer-events-auto p-4 rounded-3xl bg-[#15161C]/95 backdrop-blur-md shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 border-none">
             <div className="text-xs text-[#9FA4B2] font-sans">
               Authorizing <strong>{approvedDecisions.size}</strong> decisions and <strong>{approvedActions.size}</strong> tasks
             </div>

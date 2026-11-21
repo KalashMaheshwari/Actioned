@@ -52,7 +52,7 @@ export default function RootLayout({
         {/* Main Content Area */}
         <div
           suppressHydrationWarning
-          className="flex-1 min-w-0 pl-24 lg:pl-72 pr-4 sm:pr-8 py-8 transition-all duration-300"
+          className="flex-1 min-w-0 px-4 pt-20 pb-16 sm:px-8 sm:py-8 sm:pl-28 lg:pl-72 transition-all duration-300"
         >
           <main suppressHydrationWarning className="max-w-4xl w-full mx-auto">
             {children}

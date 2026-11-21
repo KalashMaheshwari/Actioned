@@ -259,7 +259,7 @@ function ReviewContent({
                   </div>
 
                   {/* Resolution Buttons */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#383A48]">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
                     <span className="text-xs text-[#858997]">Resolution:</span>
                     <div className="flex items-center gap-2">
                       <button

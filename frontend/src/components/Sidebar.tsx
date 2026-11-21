@@ -118,6 +118,39 @@ export function Sidebar() {
         )}
       </AnimatePresence>
 
+      {/* Mobile Floating Glass Top Header */}
+      <header className="sm:hidden fixed top-3 left-3 right-3 z-30 liquid-glass-panel rounded-2xl p-2.5 flex items-center justify-between border-none shadow-xl">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-[#181A24]">
+            <Image
+              src="/logo.webp"
+              alt="Actioned"
+              width={32}
+              height={32}
+              className="w-full h-full object-cover select-none"
+            />
+          </div>
+          <span className="font-bold text-sm text-white tracking-tight">Actioned</span>
+        </Link>
+
+        <button
+          type="button"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="px-3 py-1.5 rounded-xl bg-[#1C1F2B] text-[#D47255] font-bold text-xs flex items-center gap-1.5 cursor-pointer border-none"
+        >
+          <IngestApertureIcon className="w-3.5 h-3.5 text-[#D47255]" />
+          <span>{collapsed ? "Menu" : "Close"}</span>
+        </button>
+      </header>
+
+      {/* Mobile Backdrop Overlay when Drawer is Open */}
+      {!collapsed && (
+        <div
+          onClick={() => setIsCollapsed(true)}
+          className="sm:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-35 transition-opacity"
+        />
+      )}
+
       <motion.aside
         suppressHydrationWarning
         initial={false}
@@ -136,8 +169,10 @@ export function Sidebar() {
           damping: 32,
           mass: 0.8,
         }}
-        className={`fixed top-4 left-4 bottom-4 z-40 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none ${
-          collapsed ? "cursor-pointer" : ""
+        className={`fixed top-4 left-4 bottom-4 z-40 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none transition-transform duration-300 ${
+          collapsed
+            ? "max-sm:-translate-x-[120%] sm:translate-x-0 cursor-pointer"
+            : "max-sm:translate-x-0 max-sm:w-[270px] shadow-2xl"
         }`}
       >
         {/* Top Header & Navigation */}

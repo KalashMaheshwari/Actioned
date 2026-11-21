@@ -18,12 +18,14 @@ import {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isBackendHealthy, setIsBackendHealthy] = useState<boolean | null>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [resetDone, setResetDone] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     checkBackendHealth().then(setIsBackendHealthy);
     const interval = setInterval(() => {
       checkBackendHealth().then(setIsBackendHealthy);
@@ -68,15 +70,18 @@ export function Sidebar() {
     },
   ];
 
+  const collapsed = mounted ? isCollapsed : false;
+
   return (
     <aside
+      suppressHydrationWarning
       className={`fixed top-4 left-4 bottom-4 z-40 bg-[#15161C] rounded-3xl flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-2xl border-none ${
-        isCollapsed ? "w-20 p-3" : "w-64 p-5"
+        collapsed ? "w-20 p-3" : "w-64 p-5"
       }`}
     >
       {/* Header: Brand Logo & Collapse Toggle (Workly style) */}
-      <div className="space-y-6">
-        <div className={`flex items-center ${isCollapsed ? "justify-center" : "justify-between px-1"}`}>
+      <div className="space-y-6" suppressHydrationWarning>
+        <div className={`flex items-center ${collapsed ? "justify-center" : "justify-between px-1"}`} suppressHydrationWarning>
           <Link
             href="/"
             className="flex items-center gap-3 transition-opacity"
@@ -84,7 +89,7 @@ export function Sidebar() {
             <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-md">
               A
             </div>
-            {!isCollapsed && (
+            {!collapsed && (
               <div className="overflow-hidden">
                 <span className="font-bold text-lg text-white tracking-tight block">
                   Actioned
@@ -97,7 +102,7 @@ export function Sidebar() {
           </Link>
 
           {/* Collapse Toggle Button */}
-          {!isCollapsed && (
+          {!collapsed && (
             <button
               type="button"
               onClick={() => setIsCollapsed(true)}
@@ -110,8 +115,8 @@ export function Sidebar() {
         </div>
 
         {/* When collapsed, small expand button under logo */}
-        {isCollapsed && (
-          <div className="flex justify-center">
+        {collapsed && (
+          <div className="flex justify-center" suppressHydrationWarning>
             <button
               type="button"
               onClick={() => setIsCollapsed(false)}
@@ -124,8 +129,8 @@ export function Sidebar() {
         )}
 
         {/* Search Mockup (Workly style) */}
-        {!isCollapsed && (
-          <div className="relative">
+        {!collapsed && (
+          <div className="relative" suppressHydrationWarning>
             <Search className="w-3.5 h-3.5 text-[#6B707F] absolute left-3 top-2.5" />
             <input
               type="text"
@@ -140,8 +145,8 @@ export function Sidebar() {
         )}
 
         {/* Navigation Section */}
-        <div className="space-y-1.5 pt-1">
-          {!isCollapsed && (
+        <div className="space-y-1.5 pt-1" suppressHydrationWarning>
+          {!collapsed && (
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#6B707F] font-semibold px-2 block mb-2">
               Menu
             </span>
@@ -152,11 +157,11 @@ export function Sidebar() {
             const isActive = pathname === item.href;
 
             return (
-              <div key={item.href} className="relative group">
+              <div key={item.href} className="relative group" suppressHydrationWarning>
                 <Link
                   href={item.href}
                   className={`flex items-center gap-3 rounded-2xl transition-all cursor-pointer ${
-                    isCollapsed ? "justify-center p-3" : "px-3.5 py-3"
+                    collapsed ? "justify-center p-3" : "px-3.5 py-3"
                   } ${
                     isActive
                       ? "bg-[#D47255] text-[#2A140E] font-bold shadow-md"
@@ -168,7 +173,7 @@ export function Sidebar() {
                       isActive ? "text-[#2A140E]" : "text-[#9FA4B2] group-hover:text-white"
                     }`}
                   />
-                  {!isCollapsed && (
+                  {!collapsed && (
                     <span className="text-sm tracking-tight truncate flex-1">
                       {item.label}
                     </span>
@@ -176,7 +181,7 @@ export function Sidebar() {
                 </Link>
 
                 {/* Floating Tooltip when Collapsed (Aceagency style) */}
-                {isCollapsed && (
+                {collapsed && (
                   <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-[#D47255] text-[#2A140E] font-bold text-xs whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
                     {item.label}
                   </div>
@@ -188,18 +193,19 @@ export function Sidebar() {
       </div>
 
       {/* Bottom Profile / Workspace Pill (Workly style) */}
-      <div className="pt-2 space-y-2">
+      <div className="pt-2 space-y-2" suppressHydrationWarning>
         <div
+          suppressHydrationWarning
           className={`flex items-center gap-3 p-2 rounded-2xl bg-[#1A1C24] transition-all ${
-            isCollapsed ? "justify-center" : "px-3 py-2.5"
+            collapsed ? "justify-center" : "px-3 py-2.5"
           }`}
         >
           <div className="w-8 h-8 rounded-full bg-[#D47255] text-[#2A140E] flex items-center justify-center font-bold text-xs shrink-0">
             AC
           </div>
 
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
+          {!collapsed && (
+            <div className="flex-1 min-w-0" suppressHydrationWarning>
               <span className="text-xs font-semibold text-white block truncate">
                 Acme Corp
               </span>
@@ -209,7 +215,7 @@ export function Sidebar() {
             </div>
           )}
 
-          {!isCollapsed && (
+          {!collapsed && (
             <button
               type="button"
               onClick={handleResetWorkspace}

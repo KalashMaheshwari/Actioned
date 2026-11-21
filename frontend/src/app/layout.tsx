@@ -43,8 +43,11 @@ export default function RootLayout({
         </Suspense>
 
         {/* Main Content Area */}
-        <div className="flex-1 min-w-0 pl-24 lg:pl-72 pr-4 sm:pr-8 py-8 transition-all duration-300">
-          <main className="max-w-4xl w-full mx-auto">
+        <div
+          suppressHydrationWarning
+          className="flex-1 min-w-0 pl-24 lg:pl-72 pr-4 sm:pr-8 py-8 transition-all duration-300"
+        >
+          <main suppressHydrationWarning className="max-w-4xl w-full mx-auto">
             {children}
           </main>
         </div>

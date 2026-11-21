@@ -147,7 +147,7 @@ export function Sidebar() {
       {!collapsed && (
         <div
           onClick={() => setIsCollapsed(true)}
-          className="sm:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-35 transition-opacity"
+          className="sm:hidden fixed inset-0 bg-black/75 backdrop-blur-md z-40 transition-opacity"
         />
       )}
 
@@ -169,10 +169,10 @@ export function Sidebar() {
           damping: 32,
           mass: 0.8,
         }}
-        className={`fixed top-4 left-4 bottom-4 z-40 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none transition-transform duration-300 ${
+        className={`z-50 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none transition-transform duration-300 ${
           collapsed
-            ? "max-sm:-translate-x-[120%] sm:translate-x-0 cursor-pointer"
-            : "max-sm:translate-x-0 max-sm:w-[270px] shadow-2xl"
+            ? "max-sm:hidden sm:fixed sm:top-4 sm:left-4 sm:bottom-4 cursor-pointer"
+            : "max-sm:fixed max-sm:top-0 max-sm:bottom-0 max-sm:left-0 max-sm:h-full max-sm:w-[280px] max-sm:rounded-r-3xl max-sm:rounded-l-none sm:fixed sm:top-4 sm:left-4 sm:bottom-4 shadow-2xl"
         }`}
       >
         {/* Top Header & Navigation */}

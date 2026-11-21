@@ -27,6 +27,11 @@ export const metadata: Metadata = {
   title: "Actioned — Autonomous Meeting Agent",
   description:
     "An autonomous meeting-to-execution agent with cross-meeting memory and conflict detection.",
+  icons: {
+    icon: "/logo.webp",
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
+  },
 };
 
 export default function RootLayout({

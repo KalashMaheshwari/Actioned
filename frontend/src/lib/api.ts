@@ -7,8 +7,15 @@ import {
   PersonDigestResponse,
 } from "./types";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const isBrowser = typeof window !== "undefined";
+
+// In the browser when on Vercel or production, route through /api/proxy (Next.js same-origin rewrite)
+// to prevent CORS mismatches and browser ad-blockers (ERR_BLOCKED_BY_CLIENT) from blocking *.onrender.com
+const API_BASE_URL = isBrowser
+  ? (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+      ? "/api/proxy"
+      : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"))
+  : (process.env.NEXT_PUBLIC_API_URL || "https://actioned.onrender.com");
 
 export async function checkBackendHealth(): Promise<boolean> {
   try {

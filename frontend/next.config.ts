@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* Standard universal Next.js configuration */
+  async rewrites() {
+    return [
+      {
+        source: "/api/proxy/:path*",
+        destination: "https://actioned.onrender.com/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

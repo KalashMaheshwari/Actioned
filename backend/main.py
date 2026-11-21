@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from db import init_db
+from services.scheduler import start_scheduler, stop_scheduler
 
 load_dotenv()
 
@@ -12,7 +13,11 @@ load_dotenv()
 async def lifespan(app: FastAPI):
     # Initialize SQLite database schema
     init_db()
+    # Start APScheduler background worker
+    start_scheduler()
     yield
+    # Graceful shutdown
+    stop_scheduler()
 
 app = FastAPI(
     title="Actioned API",
@@ -37,6 +42,18 @@ async def health_check():
         "service": "actioned-backend",
         "version": "0.1.0"
     }
+
+@app.post("/dev/seed", tags=["Development"])
+async def trigger_seed():
+    from seed import seed_demo_data
+    seed_demo_data()
+    return {"status": "seeded", "message": "Demo meetings 1 & 2 seeded successfully into SQLite and ChromaDB."}
+
+@app.post("/dev/reset", tags=["Development"])
+async def trigger_reset():
+    from seed import reset_all
+    reset_all()
+    return {"status": "reset", "message": "Database and vector memory wiped clean."}
 
 # Include API routers
 from api.meetings import router as meetings_router

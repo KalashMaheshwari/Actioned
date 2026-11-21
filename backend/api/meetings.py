@@ -25,6 +25,7 @@ from services.memory import (
     get_conflicts_for_meeting
 )
 from services.integrations import create_trello_card, send_slack_notification
+from services.scheduler import schedule_task_reminder
 
 router = APIRouter(prefix="/meetings", tags=["Meetings"])
 
@@ -191,6 +192,7 @@ async def approve_meeting(meeting_id: int, approval: MeetingApprovalRequest):
         # Notify / schedule reminder
         if owner and deadline:
             send_slack_notification(f"New task assigned to {owner}: {text} (Due: {deadline})")
+            schedule_task_reminder(task_id=act_id, text=text, owner=owner, deadline=deadline)
 
     # 3. Handle conflict resolutions (e.g. {"7": "supersede"})
     if approval.conflict_resolutions:

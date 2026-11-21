@@ -18,8 +18,7 @@ import {
   ArrowLeft,
   Loader2,
   ArrowRight,
-  ShieldCheck,
-  CheckSquare,
+  ShieldAlert,
 } from "lucide-react";
 
 function ReviewContent({
@@ -73,11 +72,11 @@ function ReviewContent({
   if (!data) {
     return (
       <div className="max-w-xl mx-auto py-24 text-center space-y-4">
-        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#D97757]" />
-        <p className="text-xs text-[#736B5E] font-sans">Retrieving meeting proposal...</p>
+        <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#D47255]" />
+        <p className="text-xs text-[#858997] font-mono">Retrieving meeting proposal...</p>
         <button
           onClick={() => router.push("/")}
-          className="text-xs font-medium text-[#D97757] hover:underline cursor-pointer"
+          className="text-xs font-bold text-[#D47255] hover:underline cursor-pointer"
         >
           ← Return to Ingest Console
         </button>
@@ -134,55 +133,55 @@ function ReviewContent({
   };
 
   return (
-    <div className="space-y-10 pb-28">
-      {/* Editorial Header */}
-      <div className="space-y-2 border-b border-[#E4DCCF] pb-5">
+    <div className="space-y-8 pb-28">
+      {/* Header */}
+      <div className="space-y-2 border-b border-[#1E2028] pb-5">
         <button
           onClick={() => router.push("/")}
-          className="text-xs font-mono text-[#736B5E] hover:text-[#1F1E1B] flex items-center gap-1 transition-colors cursor-pointer"
+          className="text-xs font-mono text-[#858997] hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Back to Ingestion</span>
         </button>
 
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 pt-1">
-          <h1 className="font-serif text-3xl sm:text-4xl text-[#1F1E1B] font-normal tracking-tight">
-            Meeting Docket: {meetingMeta?.title || `Meeting #${meetingId}`}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Review: {meetingMeta?.title || `Meeting #${meetingId}`}
           </h1>
-          <div className="text-xs font-mono text-[#827869]">
-            Recorded {meetingMeta?.date || "Current"} • Executive Authorization Gate
+          <div className="text-xs font-mono text-[#858997]">
+            Date: {meetingMeta?.date || "Current"} • Executive Authorization Gate
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="p-4 rounded-xl bg-[#FDF1EC] border border-[#F5D2C4] text-xs text-[#B93828] flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="p-4 rounded-2xl bg-[#D47255] text-[#2A140E] text-xs font-bold flex items-center gap-2 border-none">
+          <AlertCircle className="w-4 h-4 shrink-0 text-[#2A140E]" />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Success Commit Banner in Soft Sage Pastel */}
+      {/* Success Commit Banner */}
       {commitResult && (
-        <div className="p-6 rounded-2xl bg-[#EEF5F0] border border-[#D3E5D7] space-y-3 shadow-xs">
-          <div className="flex items-center gap-2 text-[#2D5A43] font-serif text-lg font-medium">
-            <CheckCircle2 className="w-5 h-5 text-[#2D5A43]" />
+        <div className="p-6 rounded-3xl bg-[#1C1E26] space-y-3 border-none shadow-xl">
+          <div className="flex items-center gap-2 text-[#D47255] font-bold text-lg">
+            <CheckCircle2 className="w-5 h-5 text-[#D47255]" />
             <span>Authorized & Committed to Permanent Memory</span>
           </div>
-          <p className="text-xs text-[#43634F] leading-relaxed max-w-2xl">
-            Decisions have been indexed into the vector memory archive. Tasks have been created in Trello, and pre-deadline Slack notifications have been scheduled.
+          <p className="text-xs text-[#9FA4B2] leading-relaxed max-w-2xl">
+            Decisions indexed in ChromaDB vector store. Deliverables dispatched to Trello, and 24h deadline alerts scheduled.
           </p>
           <div className="pt-2 flex items-center gap-3">
             <button
               onClick={() => router.push("/decisions")}
-              className="btn-terracotta px-4 py-2 text-xs flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-5 py-2.5 rounded-2xl font-bold text-xs bg-[#D47255] text-[#2A140E] flex items-center gap-2 cursor-pointer border-none shadow-md"
             >
-              <span>View Decision Memory Log</span>
+              <span>View Decision Memory</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => router.push("/digest")}
-              className="px-4 py-2 text-xs font-medium rounded-lg bg-white border border-[#D5E6D8] text-[#2D5A43] hover:bg-[#E6F0E8] cursor-pointer transition-colors shadow-xs"
+              className="px-5 py-2.5 rounded-2xl font-semibold text-xs bg-[#242632] text-white hover:bg-[#2C2E3C] cursor-pointer transition-colors border-none"
             >
               View Team Digest
             </button>
@@ -190,21 +189,21 @@ function ReviewContent({
         </div>
       )}
 
-      {/* SECTION 1: CONFLICT MEMORANDUM IN RICH PASTEL TERRACOTTA */}
+      {/* SECTION 1: CONFLICT MEMORANDUM BOX (Filled with #D47255, NO BORDER, Dark Chocolate Brown Text) */}
       {data.conflicts.length > 0 && (
-        <div className="rounded-2xl p-6 space-y-4 bg-[#FDF1EB] border border-[#F4D5C7] shadow-xs">
+        <div className="rounded-3xl p-6 sm:p-7 space-y-5 bg-[#D47255] text-[#2A140E] shadow-2xl border-none">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[#B93828] font-serif text-lg">
-              <AlertCircle className="w-5 h-5 text-[#B93828]" />
-              <span>Contradiction with Historical Consensus ({data.conflicts.length})</span>
+            <div className="flex items-center gap-2.5 font-extrabold text-xl">
+              <ShieldAlert className="w-6 h-6 text-[#2A140E]" />
+              <span>Consensus Contradiction Detected ({data.conflicts.length})</span>
             </div>
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#B93828] bg-[#FBE2D8] px-2.5 py-0.5 rounded-full font-bold">
-              Consensus Contradiction
+            <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider bg-[#2A140E] text-[#D47255] px-3 py-1 rounded-full">
+              Conflict Alert
             </span>
           </div>
 
-          <p className="text-xs text-[#7A4B3C] leading-relaxed">
-            Persistent memory detected that a new agreement contradicts a decision previously approved by the team. Please determine how memory should resolve this conflict.
+          <p className="text-xs text-[#361A12] leading-relaxed font-medium">
+            Actioned identified that a newly proposed agreement contradicts an earlier decision stored in persistent memory.
           </p>
 
           <div className="space-y-4 pt-1">
@@ -216,59 +215,58 @@ function ReviewContent({
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl border border-[#F2C9B7] p-5 space-y-4 shadow-xs"
+                  className="bg-[#2A140E] text-white rounded-2xl p-5 space-y-4 border-none shadow-md"
                 >
-                  {/* Side-by-Side Contradiction Comparison */}
+                  {/* Side-by-Side Comparison */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Earlier Consensus - Pastel Sage Container */}
-                    <div className="p-4 rounded-xl bg-[#F0F5F1] border border-[#D8E8DC] space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#637E6B]">
-                        <span className="font-semibold">RECORDED IN MEMORY</span>
-                        <span className="text-[#2D5A43] font-bold">Active Consensus</span>
+                    {/* Earlier Decision */}
+                    <div className="p-4 rounded-xl bg-[#1C1E26] space-y-1.5 border-none">
+                      <div className="flex items-center justify-between text-[10px] font-mono text-[#858997]">
+                        <span>HISTORICAL MEMORY</span>
+                        <span className="text-[#D47255] font-bold">Active Consensus</span>
                       </div>
-                      <p className="font-serif text-base text-[#1F1E1B]">
+                      <p className="text-sm font-bold text-white">
                         "{conf.old_decision.text}"
                       </p>
-                      <div className="text-[11px] font-mono text-[#708877] pt-1">
+                      <div className="text-[11px] font-mono text-[#858997] pt-1">
                         Origin: {conf.old_decision.meeting_title} ({conf.old_decision.date})
-                        {conf.old_decision.owner && ` • Owner: ${conf.old_decision.owner}`}
                       </div>
                     </div>
 
-                    {/* Newly Proposed - Pastel Peach Container */}
-                    <div className="p-4 rounded-xl bg-[#FFF6F2] border border-[#F6D7CB] space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-mono text-[#B93828]">
-                        <span className="font-semibold">INCOMING PROPOSAL</span>
-                        <span className="font-bold">Pending Ratification</span>
+                    {/* Proposed Revision */}
+                    <div className="p-4 rounded-xl bg-[#1C1E26] space-y-1.5 border-none">
+                      <div className="flex items-center justify-between text-[10px] font-mono text-[#D47255]">
+                        <span className="font-bold">INCOMING PROPOSAL</span>
+                        <span>Pending Approval</span>
                       </div>
-                      <p className="font-serif text-base text-[#1F1E1B]">
+                      <p className="text-sm font-bold text-white">
                         "{newDecisionObj?.text || "New Decision"}"
                       </p>
-                      <div className="text-[11px] font-mono text-[#9E6050] pt-1">
+                      <div className="text-[11px] font-mono text-[#858997] pt-1">
                         From current meeting transcript
                       </div>
                     </div>
                   </div>
 
                   {/* Contradiction Analysis */}
-                  <div className="text-xs text-[#6B4B42] bg-[#FAF3EE] p-3.5 rounded-lg border border-[#F4DDD2] leading-relaxed">
-                    <span className="font-semibold text-[#B93828]">Contradiction reason: </span>
+                  <div className="text-xs text-[#D0D3DC] bg-[#16171D] p-3.5 rounded-xl border-none leading-relaxed">
+                    <span className="font-bold text-[#D47255]">Contradiction Reason: </span>
                     {conf.reason}
                   </div>
 
-                  {/* Resolution Choice */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#F7E5DE]">
-                    <span className="text-xs text-[#736B5E] font-medium">Memory resolution upon confirmation:</span>
+                  {/* Resolution Buttons */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#383A48]">
+                    <span className="text-xs text-[#858997]">Resolution:</span>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() =>
                           setConflictResolutions((prev) => ({ ...prev, [oldId]: "supersede" }))
                         }
-                        className={`px-3.5 py-1.5 text-xs rounded-lg font-sans transition-all cursor-pointer ${
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border-none ${
                           currentRes === "supersede"
-                            ? "bg-[#D97757] text-white font-medium shadow-xs"
-                            : "bg-[#FAF7F0] border border-[#DDD4C3] text-[#544D41] hover:bg-[#F2ECE0]"
+                            ? "bg-[#D47255] text-[#2A140E] shadow-md"
+                            : "bg-[#1C1E26] text-[#858997] hover:text-white"
                         }`}
                       >
                         Supersede previous decision
@@ -279,10 +277,10 @@ function ReviewContent({
                         onClick={() =>
                           setConflictResolutions((prev) => ({ ...prev, [oldId]: "dismiss" }))
                         }
-                        className={`px-3.5 py-1.5 text-xs rounded-lg font-sans transition-all cursor-pointer ${
+                        className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer border-none ${
                           currentRes === "dismiss"
-                            ? "bg-[#1F1E1B] text-white font-medium shadow-xs"
-                            : "bg-[#FAF7F0] border border-[#DDD4C3] text-[#544D41] hover:bg-[#F2ECE0]"
+                            ? "bg-[#D47255] text-[#2A140E] shadow-md"
+                            : "bg-[#1C1E26] text-[#858997] hover:text-white"
                         }`}
                       >
                         Keep both decisions
@@ -296,18 +294,18 @@ function ReviewContent({
         </div>
       )}
 
-      {/* SECTION 2: EXTRACTED DECISIONS IN PASTEL SAGE PANEL */}
-      <div className="rounded-2xl p-6 space-y-4 bg-[#F2F7F4] border border-[#D7E8DC] shadow-xs">
-        <div className="flex items-baseline justify-between border-b border-[#D8EADE] pb-3">
+      {/* SECTION 2: EXTRACTED DECISIONS */}
+      <div className="bg-[#15161C] rounded-3xl p-6 sm:p-7 space-y-4 border-none shadow-xl">
+        <div className="flex items-baseline justify-between border-b border-[#1E2028] pb-3">
           <div>
-            <h2 className="font-serif text-xl text-[#1F1E1B]">
+            <h2 className="text-lg font-bold text-white">
               Decisions for Ratification ({data.decisions.length})
             </h2>
-            <p className="text-xs text-[#526D59] mt-0.5">
-              Approved items are written to the permanent cross-meeting memory vector log.
+            <p className="text-xs text-[#858997] mt-0.5">
+              Approved items are written to the permanent cross-meeting memory log.
             </p>
           </div>
-          <span className="text-xs font-mono text-[#526D59] font-medium">
+          <span className="text-xs font-mono text-[#D47255] font-semibold">
             {approvedDecisions.size} of {data.decisions.length} selected
           </span>
         </div>
@@ -321,41 +319,41 @@ function ReviewContent({
             return (
               <div
                 key={dec.id}
-                className={`p-4 rounded-xl border transition-all ${
+                className={`p-4 rounded-2xl transition-all border-none ${
                   isApproved
-                    ? "bg-white border-[#C9DFD0] shadow-xs"
-                    : "bg-[#F7FAF8] border-[#DFEBE2] opacity-60"
+                    ? "bg-[#1C1E26]"
+                    : "bg-[#1A1C24] opacity-50"
                 }`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3.5">
                   <input
                     type="checkbox"
                     checked={isApproved}
                     onChange={() => toggleDecision(dec.id)}
-                    className="mt-1 h-4 w-4 rounded border-[#BBD5C4] text-[#D97757] focus:ring-[#D97757]/30 cursor-pointer"
+                    className="mt-1 h-4 w-4 rounded-lg bg-[#15161C] text-[#D47255] focus:ring-0 cursor-pointer border-none"
                   />
                   <div className="flex-1 space-y-2">
                     <input
                       type="text"
                       value={currentText}
                       onChange={(e) => handleEditChange(dec.id, "text", e.target.value)}
-                      className="w-full font-serif text-base text-[#1F1E1B] bg-transparent border-b border-transparent hover:border-[#D5E6D8] focus:border-[#D97757] focus:outline-none py-0.5"
+                      className="w-full text-sm font-semibold text-white bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-[#D47255] rounded px-1 py-0.5"
                     />
 
-                    <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#637E6B]">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#858997]">
                       <div className="flex items-center gap-1.5">
-                        <User className="w-3.5 h-3.5 text-[#88A691]" />
+                        <User className="w-3.5 h-3.5 text-[#858997]" />
                         <input
                           type="text"
                           placeholder="Owner (optional)"
                           value={currentOwner}
                           onChange={(e) => handleEditChange(dec.id, "owner", e.target.value)}
-                          className="bg-transparent border-b border-transparent hover:border-[#D5E6D8] focus:border-[#D97757] focus:outline-none text-xs w-28 text-[#1F1E1B]"
+                          className="bg-transparent border-none focus:outline-none text-xs w-28 text-white focus:ring-1 focus:ring-[#D47255] rounded px-1"
                         />
                       </div>
                       <span>Line #{dec.source_line}</span>
-                      <span className="text-[#2D5A43] font-semibold">
-                        {(dec.confidence * 100).toFixed(0)}% extraction confidence
+                      <span className="text-[#D47255] font-semibold">
+                        {(dec.confidence * 100).toFixed(0)}% confidence
                       </span>
                     </div>
                   </div>
@@ -366,18 +364,18 @@ function ReviewContent({
         </div>
       </div>
 
-      {/* SECTION 3: EXTRACTED ACTION ITEMS IN PASTEL BLUE/IRIS PANEL */}
-      <div className="rounded-2xl p-6 space-y-4 bg-[#F1F5FB] border border-[#D5E3F5] shadow-xs">
-        <div className="flex items-baseline justify-between border-b border-[#D8E6F7] pb-3">
+      {/* SECTION 3: EXTRACTED ACTION ITEMS */}
+      <div className="bg-[#15161C] rounded-3xl p-6 sm:p-7 space-y-4 border-none shadow-xl">
+        <div className="flex items-baseline justify-between border-b border-[#1E2028] pb-3">
           <div>
-            <h2 className="font-serif text-xl text-[#1F1E1B]">
+            <h2 className="text-lg font-bold text-white">
               Action Items & Tracker Dispatch ({data.action_items.length})
             </h2>
-            <p className="text-xs text-[#526B85] mt-0.5">
-              Authorized items are created in Trello and scheduled for 24h deadline reminders.
+            <p className="text-xs text-[#858997] mt-0.5">
+              Authorized items are created in Trello and scheduled for 24h deadline alerts.
             </p>
           </div>
-          <span className="text-xs font-mono text-[#526B85] font-medium">
+          <span className="text-xs font-mono text-[#D47255] font-semibold">
             {approvedActions.size} of {data.action_items.length} selected
           </span>
         </div>
@@ -392,53 +390,51 @@ function ReviewContent({
             return (
               <div
                 key={act.id}
-                className={`p-4 rounded-xl border transition-all ${
+                className={`p-4 rounded-2xl transition-all border-none ${
                   isApproved
-                    ? "bg-white border-[#C9DBEE] shadow-xs"
-                    : "bg-[#F7FAFD] border-[#DEEAF7] opacity-60"
+                    ? "bg-[#1C1E26]"
+                    : "bg-[#1A1C24] opacity-50"
                 }`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3.5">
                   <input
                     type="checkbox"
                     checked={isApproved}
                     onChange={() => toggleAction(act.id)}
-                    className="mt-1 h-4 w-4 rounded border-[#BACFE6] text-[#D97757] focus:ring-[#D97757]/30 cursor-pointer"
+                    className="mt-1 h-4 w-4 rounded-lg bg-[#15161C] text-[#D47255] focus:ring-0 cursor-pointer border-none"
                   />
                   <div className="flex-1 space-y-2">
                     <input
                       type="text"
                       value={currentText}
                       onChange={(e) => handleEditChange(act.id, "text", e.target.value)}
-                      className="w-full font-serif text-base text-[#1F1E1B] bg-transparent border-b border-transparent hover:border-[#D5E2F0] focus:border-[#D97757] focus:outline-none py-0.5"
+                      className="w-full text-sm font-semibold text-white bg-transparent border-none focus:outline-none focus:ring-1 focus:ring-[#D47255] rounded px-1 py-0.5"
                     />
 
-                    <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#526B85]">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#858997]">
                       <div className="flex items-center gap-1.5">
-                        <User className="w-3.5 h-3.5 text-[#88A2BC]" />
+                        <User className="w-3.5 h-3.5 text-[#858997]" />
                         <input
                           type="text"
                           placeholder="Assignee (e.g. Rahul)"
                           value={currentOwner}
                           onChange={(e) => handleEditChange(act.id, "owner", e.target.value)}
-                          className={`bg-transparent border-b hover:border-[#D5E2F0] focus:border-[#D97757] focus:outline-none text-xs w-32 ${
-                            !currentOwner ? "border-[#D97757] text-[#B93828]" : "border-transparent text-[#1F1E1B]"
-                          }`}
+                          className="bg-transparent border-none focus:outline-none text-xs w-32 text-white focus:ring-1 focus:ring-[#D47255] rounded px-1"
                         />
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-[#88A2BC]" />
+                        <Calendar className="w-3.5 h-3.5 text-[#858997]" />
                         <input
                           type="date"
                           value={currentDeadline}
                           onChange={(e) => handleEditChange(act.id, "deadline", e.target.value)}
-                          className="bg-transparent border-b border-transparent hover:border-[#D5E2F0] focus:border-[#D97757] focus:outline-none text-xs text-[#1F1E1B]"
+                          className="bg-transparent border-none focus:outline-none text-xs text-white focus:ring-1 focus:ring-[#D47255] rounded px-1"
                         />
                       </div>
 
                       <span>Line #{act.source_line}</span>
-                      <span className="text-[#2C5278] font-semibold">
+                      <span className="text-[#D47255] font-semibold">
                         {(act.confidence * 100).toFixed(0)}% confidence
                       </span>
                     </div>
@@ -450,19 +446,19 @@ function ReviewContent({
         </div>
       </div>
 
-      {/* Floating Bottom Docket Bar in Pastel Cream Butter */}
+      {/* Floating Bottom Docket Bar */}
       {!commitResult && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-3xl px-4 z-40">
-          <div className="p-3.5 rounded-2xl bg-[#FFFDF8]/95 backdrop-blur-md shadow-lg border border-[#D5CBB9] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="text-xs text-[#615A4C] font-sans">
-              Authorizing <strong>{approvedDecisions.size}</strong> decisions and <strong>{approvedActions.size}</strong> tracker tasks
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-3xl px-4 z-30">
+          <div className="p-4 rounded-3xl bg-[#15161C]/95 backdrop-blur-md shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-3 border-none">
+            <div className="text-xs text-[#9FA4B2] font-sans">
+              Authorizing <strong>{approvedDecisions.size}</strong> decisions and <strong>{approvedActions.size}</strong> tasks
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => router.push("/")}
-                className="px-3 py-1.5 text-xs rounded-lg bg-[#FAF6EE] border border-[#DDD4C3] text-[#736B5E] hover:text-[#1F1E1B] cursor-pointer"
+                className="px-4 py-2 text-xs rounded-xl bg-[#1C1E26] text-[#858997] hover:text-white cursor-pointer border-none"
               >
                 Discard
               </button>
@@ -471,16 +467,16 @@ function ReviewContent({
                 type="button"
                 onClick={handleCommit}
                 disabled={isSubmitting}
-                className="btn-terracotta px-5 py-2 text-xs flex items-center gap-2 flex-1 sm:flex-initial justify-center cursor-pointer disabled:opacity-50 shadow-xs"
+                className="px-6 py-2.5 text-xs font-bold rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center gap-2 flex-1 sm:flex-initial justify-center cursor-pointer disabled:opacity-50 border-none shadow-md"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                    <span>Committing to memory...</span>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#2A140E]" />
+                    <span>Committing...</span>
                   </>
                 ) : (
                   <>
-                    <span>Authorize & Commit to Memory</span>
+                    <span>Confirm & Commit to Memory</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
@@ -497,8 +493,8 @@ export default function ReviewPage(props: { params: Promise<{ id: string }> }) {
   return (
     <Suspense
       fallback={
-        <div className="py-24 text-center text-xs text-[#736B5E] font-mono">
-          Loading meeting docket...
+        <div className="py-24 text-center text-xs text-[#858997] font-mono">
+          Loading meeting review...
         </div>
       }
     >

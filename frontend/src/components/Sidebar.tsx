@@ -2,25 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { checkBackendHealth, seedDemoData } from "@/lib/api";
 import {
-  Menu,
-  X,
   Sparkles,
   BookOpen,
   Users,
   RotateCcw,
   Check,
+  ChevronLeft,
   ChevronRight,
-  ShieldCheck,
   Database,
-  Layers,
+  Search,
 } from "lucide-react";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isBackendHealthy, setIsBackendHealthy] = useState<boolean | null>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [resetDone, setResetDone] = useState(false);
@@ -33,32 +31,17 @@ export function Sidebar() {
     return () => clearInterval(interval);
   }, []);
 
-  // Keyboard shortcut listener (ESC or '[' to toggle)
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      } else if (e.key === "[" && !["INPUT", "TEXTAREA"].includes((e.target as HTMLElement)?.tagName)) {
-        setIsOpen((prev) => !prev);
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
-
   const handleResetWorkspace = async () => {
     setIsResetting(true);
     try {
       await seedDemoData();
       setResetDone(true);
-      setTimeout(() => {
-        setResetDone(false);
-      }, 1800);
+      setTimeout(() => setResetDone(false), 2000);
       if (typeof window !== "undefined" && window.location.pathname !== "/") {
         window.location.reload();
       }
     } catch {
-      alert("Failed to reset workspace. Ensure backend is running at http://localhost:8000");
+      alert("Failed to reload workspace data.");
     } finally {
       setIsResetting(false);
     }
@@ -68,183 +51,175 @@ export function Sidebar() {
     {
       href: "/",
       label: "Ingest Meeting",
-      description: "Transcripts, audio, and VTT",
       icon: Sparkles,
+      badge: "Whisper",
     },
     {
       href: "/decisions",
       label: "Decision Memory",
-      description: "Permanent vector archive",
       icon: BookOpen,
+      badge: "Vector",
     },
     {
       href: "/digest",
       label: "Team Digest",
-      description: "Personalized deliverables",
       icon: Users,
+      badge: "Weekly",
     },
   ];
 
   return (
-    <>
-      {/* Floating Dynamic Trigger Button (Top Left) */}
-      <div className="fixed top-6 left-6 z-40 flex items-center gap-3">
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          aria-label="Open Navigation Menu"
-          className="group flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#FFFDF9]/90 backdrop-blur-md border border-[#E0D7C6] hover:border-[#D5CBB9] text-[#1F1E1B] shadow-xs hover:shadow-sm transition-all duration-200 cursor-pointer"
-        >
-          <Menu className="w-4 h-4 text-[#736B5E] group-hover:text-[#1F1E1B] transition-colors" />
-          <span className="font-serif text-sm font-medium tracking-tight">Actioned</span>
-          <span className="text-[10px] text-[#D97757] font-mono">●</span>
-        </button>
+    <aside
+      className={`fixed top-4 left-4 bottom-4 z-40 bg-[#15161C] rounded-3xl flex flex-col justify-between transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] shadow-2xl border-none ${
+        isCollapsed ? "w-20 p-3" : "w-64 p-5"
+      }`}
+    >
+      {/* Top Bar: Mac Dots + Collapse Button */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          {/* Mac Window Dots */}
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-[#FF5F56] inline-block" />
+            <span className="w-3 h-3 rounded-full bg-[#FFBD2E] inline-block" />
+            <span className="w-3 h-3 rounded-full bg-[#27C93F] inline-block" />
+          </div>
 
-        {/* Quiet Live Status Dot next to floating trigger */}
-        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#EFE9DC]/70 border border-[#E2D9C8] text-[11px] font-mono text-[#736B5E]">
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              isBackendHealthy ? "bg-[#3F7552]" : "bg-[#B87A28]"
-            }`}
-          />
-          <span>{isBackendHealthy ? "Core active" : "Connecting"}</span>
+          {/* Collapse / Expand Toggle */}
+          <button
+            type="button"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="w-7 h-7 rounded-full bg-[#1E2028] hover:bg-[#282A36] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-colors cursor-pointer border-none"
+          >
+            {isCollapsed ? (
+              <ChevronRight className="w-4 h-4" />
+            ) : (
+              <ChevronLeft className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+
+        {/* Brand Wordmark */}
+        <Link
+          href="/"
+          className={`flex items-center gap-3 transition-opacity ${
+            isCollapsed ? "justify-center" : "px-1"
+          }`}
+        >
+          <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-md">
+            A
+          </div>
+          {!isCollapsed && (
+            <div className="overflow-hidden">
+              <span className="font-bold text-lg text-white tracking-tight block">
+                Actioned
+              </span>
+              <span className="text-[11px] text-[#858997] font-sans block truncate">
+                Meeting Agent
+              </span>
+            </div>
+          )}
+        </Link>
+
+        {/* Search Mockup (Workly style) */}
+        {!isCollapsed && (
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-[#6B707F] absolute left-3 top-2.5" />
+            <input
+              type="text"
+              readOnly
+              placeholder="Search..."
+              className="w-full pl-8 pr-12 py-1.5 text-xs rounded-xl bg-[#1A1C24] text-[#9FA4B2] placeholder-[#6B707F] border-none focus:outline-none"
+            />
+            <span className="absolute right-2.5 top-2 text-[10px] font-mono text-[#6B707F] bg-[#15161C] px-1 rounded">
+              ⌘K
+            </span>
+          </div>
+        )}
+
+        {/* Navigation Section */}
+        <div className="space-y-1.5 pt-1">
+          {!isCollapsed && (
+            <span className="text-[10px] font-mono uppercase tracking-wider text-[#6B707F] font-semibold px-2 block mb-2">
+              Menu
+            </span>
+          )}
+
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+
+            return (
+              <div key={item.href} className="relative group">
+                <Link
+                  href={item.href}
+                  className={`flex items-center gap-3 rounded-2xl transition-all cursor-pointer ${
+                    isCollapsed ? "justify-center p-3" : "px-3.5 py-3"
+                  } ${
+                    isActive
+                      ? "bg-[#D47255] text-[#2A140E] font-bold shadow-md"
+                      : "text-[#9FA4B2] hover:text-white hover:bg-[#1A1C24]"
+                  }`}
+                >
+                  <Icon
+                    className={`w-5 h-5 shrink-0 ${
+                      isActive ? "text-[#2A140E]" : "text-[#9FA4B2] group-hover:text-white"
+                    }`}
+                  />
+                  {!isCollapsed && (
+                    <span className="text-sm tracking-tight truncate flex-1">
+                      {item.label}
+                    </span>
+                  )}
+                </Link>
+
+                {/* Floating Tooltip when Collapsed (Aceagency style) */}
+                {isCollapsed && (
+                  <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-[#D47255] text-[#2A140E] font-bold text-xs whitespace-nowrap shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50">
+                    {item.label}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Backdrop Overlay with Smooth Fade */}
-      <div
-        onClick={() => setIsOpen(false)}
-        className={`fixed inset-0 bg-[#1F1E1B]/20 backdrop-blur-xs z-50 transition-opacity duration-300 ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      />
+      {/* Bottom Profile / Workspace Pill (Workly style) */}
+      <div className="pt-2 space-y-2">
+        <div
+          className={`flex items-center gap-3 p-2 rounded-2xl bg-[#1A1C24] transition-all ${
+            isCollapsed ? "justify-center" : "px-3 py-2.5"
+          }`}
+        >
+          <div className="w-8 h-8 rounded-full bg-[#D47255] text-[#2A140E] flex items-center justify-center font-bold text-xs shrink-0">
+            AC
+          </div>
 
-      {/* Fluid Animated Slide-Out Side Nav Drawer */}
-      <aside
-        className={`fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-[#FFFDF9] border-r border-[#E5DDD0] shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        {/* Top Header & Branding */}
-        <div className="p-6 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-[#EFE9DC]">
-            <Link
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 group"
-            >
-              <span className="font-serif text-2xl font-normal tracking-tight text-[#1F1E1B] group-hover:text-[#D97757] transition-colors">
-                Actioned
+          {!isCollapsed && (
+            <div className="flex-1 min-w-0">
+              <span className="text-xs font-semibold text-white block truncate">
+                Acme Corp
               </span>
-              <span className="text-xs text-[#D97757] font-mono tracking-widest font-semibold">
-                ●
+              <span className="text-[11px] text-[#858997] block truncate">
+                {isBackendHealthy ? "Memory Connected" : "Connecting..."}
               </span>
-            </Link>
+            </div>
+          )}
 
+          {!isCollapsed && (
             <button
               type="button"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close Navigation Menu"
-              className="p-1.5 rounded-lg text-[#736B5E] hover:text-[#1F1E1B] hover:bg-[#F5EFE4] transition-colors cursor-pointer"
+              onClick={handleResetWorkspace}
+              disabled={isResetting}
+              title="Reload sample data"
+              className="p-1 rounded-lg text-[#858997] hover:text-[#D47255] transition-colors cursor-pointer"
             >
-              <X className="w-5 h-5" />
+              <RotateCcw className={`w-3.5 h-3.5 ${isResetting ? "animate-spin text-[#D47255]" : ""}`} />
             </button>
-          </div>
-
-          {/* Workspace Card */}
-          <div className="p-3.5 rounded-xl bg-[#FAF6EE] border border-[#E5DDD0] space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#736B5E] font-semibold">
-                Current Workspace
-              </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#EAE2D2] text-[#2D5A43] font-medium">
-                Connected
-              </span>
-            </div>
-            <div className="font-serif text-sm font-medium text-[#1F1E1B]">
-              Acme Corp
-            </div>
-            <div className="pt-2 border-t border-[#EDE5D6] flex items-center justify-between">
-              <button
-                type="button"
-                onClick={handleResetWorkspace}
-                disabled={isResetting}
-                className="text-[11px] font-mono text-[#736B5E] hover:text-[#D97757] flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
-              >
-                <RotateCcw className={`w-3 h-3 ${isResetting ? "animate-spin text-[#D97757]" : ""}`} />
-                <span>{resetDone ? "Data reloaded!" : "Reload sample data"}</span>
-              </button>
-              {resetDone && <Check className="w-3.5 h-3.5 text-[#2D5A43]" />}
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="space-y-1.5 pt-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-[#9E9585] block px-3 mb-2 font-semibold">
-              Navigation
-            </span>
-
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`group flex items-center justify-between p-3 rounded-xl transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[#FDF1EB] border border-[#F4D5C7] text-[#1F1E1B]"
-                      : "hover:bg-[#FAF6EE] text-[#544D41] border border-transparent"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`p-2 rounded-lg transition-colors ${
-                        isActive
-                          ? "bg-[#FBE2D8] text-[#B93828]"
-                          : "bg-[#F5EFE4] text-[#736B5E] group-hover:text-[#1F1E1B]"
-                      }`}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <span className={`block text-sm font-sans ${isActive ? "font-semibold text-[#B93828]" : "font-medium"}`}>
-                        {item.label}
-                      </span>
-                      <span className="block text-[11px] text-[#8C8474]">
-                        {item.description}
-                      </span>
-                    </div>
-                  </div>
-
-                  <ChevronRight
-                    className={`w-4 h-4 transition-transform group-hover:translate-x-0.5 ${
-                      isActive ? "text-[#B93828]" : "text-[#B0A798]"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
+          )}
         </div>
-
-        {/* Bottom Drawer Footer */}
-        <div className="p-6 border-t border-[#EFE9DC] bg-[#FAF7F0] space-y-3">
-          <div className="flex items-center justify-between text-xs text-[#736B5E] font-mono">
-            <span className="flex items-center gap-1.5">
-              <Database className="w-3.5 h-3.5 text-[#88A691]" />
-              <span>ChromaDB Memory</span>
-            </span>
-            <span className="text-[#2D5A43] font-medium">1,536-dim</span>
-          </div>
-
-          <div className="text-[11px] text-[#8C8474] font-sans flex items-center justify-between pt-1">
-            <span>Press <kbd className="px-1.5 py-0.5 rounded bg-white border border-[#DDD4C3] font-mono text-[10px] text-[#544D41]">[</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-white border border-[#DDD4C3] font-mono text-[10px] text-[#544D41]">ESC</kbd></span>
-            <span>v0.1.0</span>
-          </div>
-        </div>
-      </aside>
-    </>
+      </div>
+    </aside>
   );
 }

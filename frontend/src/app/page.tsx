@@ -12,9 +12,6 @@ import {
   FileText,
   Calendar,
   Volume2,
-  Sparkles,
-  ShieldCheck,
-  CheckCircle2,
 } from "lucide-react";
 
 export default function IngestPage() {
@@ -45,7 +42,7 @@ export default function IngestPage() {
     setTitle(sampleTitle);
     setDate("2026-10-04");
     setFormat("audio");
-    const blob = new Blob(["audio file stream"], { type: "audio/mp3" });
+    const blob = new Blob(["audio stream"], { type: "audio/mp3" });
     const file = new File([blob], `${sampleName}.mp3`, { type: "audio/mp3" });
     setAudioFile(file);
     setError(null);
@@ -98,136 +95,109 @@ export default function IngestPage() {
   };
 
   return (
-    <div className="space-y-10">
-      {/* Editorial Header */}
-      <div className="space-y-4 max-w-2xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAE2D2] border border-[#DDD3BF] text-[11px] font-mono uppercase tracking-wider text-[#735A43] font-semibold">
-          <Sparkles className="w-3.5 h-3.5 text-[#D97757]" />
-          <span>Autonomous Meeting-to-Execution System</span>
-        </div>
-
-        <h1 className="font-serif text-4xl sm:text-5xl font-normal tracking-tight text-[#1F1E1B] leading-[1.15]">
-          Meetings make decisions. <br />
-          <span className="italic text-[#706B62]">Actioned keeps them.</span>
+    <div className="space-y-8">
+      {/* Page Header (Workly Style) */}
+      <div className="space-y-2">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          Ingest Meeting
         </h1>
-
-        <p className="text-sm sm:text-base text-[#615C52] leading-relaxed">
-          An autonomous system that parses spoken discussions, builds a permanent cross-meeting memory, flags contradictions before they become mistakes, and synchronizes confirmed tasks to Trello.
+        <p className="text-sm text-[#9FA4B2] leading-relaxed max-w-xl">
+          Extract decisions & action items, maintain cross-meeting memory, and reconcile schedule shifts.
         </p>
       </div>
 
-      {/* 3 Pastel Workspace Meeting Cards */}
-      <div className="space-y-3">
-        <div className="flex items-baseline justify-between text-xs text-[#7A7468]">
-          <span className="font-mono uppercase tracking-wider text-[11px] font-semibold">
-            Sample Workspace Transcripts
-          </span>
-          <span className="text-[#878073]">
-            Select Meeting 1 (Initial Consensus) → Meeting 3 (Schedule Revision)
-          </span>
-        </div>
+      {/* 3 Scenario Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Card 1 */}
+        <button
+          type="button"
+          onClick={() => loadPreset("meeting1")}
+          className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
+        >
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono text-[#858997] block">
+              01 / BASELINE
+            </span>
+            <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
+              Roadmap Kickoff
+            </h3>
+            <p className="text-xs text-[#858997] leading-relaxed">
+              Sets initial deliverables and targets April 15 release.
+            </p>
+          </div>
+          <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
+            <span className="font-mono">2026-10-03</span>
+            <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
+              Load →
+            </span>
+          </div>
+        </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-          {/* Card 1: Pastel Sage */}
-          <button
-            type="button"
-            onClick={() => loadPreset("meeting1")}
-            className="p-4.5 rounded-xl text-left bg-[#EFF5F0] border border-[#D5E6D8] hover:border-[#BFD8C3] transition-all cursor-pointer group flex flex-col justify-between shadow-xs"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-[#637E6B]">
-                <span className="font-mono font-semibold">01 / ROADMAP KICKOFF</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#E2EFE4] text-[#2D5A43] font-semibold">
-                  TRANSCRIPT
-                </span>
-              </div>
-              <h3 className="font-serif text-lg text-[#1F1E1B] group-hover:text-[#2D5A43] transition-colors">
-                Roadmap Kickoff
-              </h3>
-              <p className="text-xs text-[#526658] leading-relaxed">
-                Initial planning session establishing deliverables and the April 15 launch target.
-              </p>
-            </div>
-            <div className="pt-3 mt-3 border-t border-[#D9EAD9] flex items-center justify-between text-[11px] text-[#637E6B]">
-              <span className="font-mono">2026-10-03</span>
-              <span className="font-medium text-[#2D5A43] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                Load transcript →
-              </span>
-            </div>
-          </button>
+        {/* Card 2 */}
+        <button
+          type="button"
+          onClick={() => loadPreset("meeting2")}
+          className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
+        >
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono text-[#858997] block">
+              02 / SPRINT SYNC
+            </span>
+            <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
+              Sprint 14 Planning
+            </h3>
+            <p className="text-xs text-[#858997] leading-relaxed">
+              Relative deadlines ("next Friday") assigned to Priya & Arjun.
+            </p>
+          </div>
+          <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
+            <span className="font-mono">2026-11-14</span>
+            <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
+              Load →
+            </span>
+          </div>
+        </button>
 
-          {/* Card 2: Pastel Sky / Periwinkle */}
-          <button
-            type="button"
-            onClick={() => loadPreset("meeting2")}
-            className="p-4.5 rounded-xl text-left bg-[#EEF4F9] border border-[#D4E2F1] hover:border-[#BCD2EA] transition-all cursor-pointer group flex flex-col justify-between shadow-xs"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-[#57728E]">
-                <span className="font-mono font-semibold">02 / SPRINT SYNC</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#DEEAF6] text-[#2C5278] font-semibold">
-                  TRANSCRIPT
-                </span>
-              </div>
-              <h3 className="font-serif text-lg text-[#1F1E1B] group-hover:text-[#2C5278] transition-colors">
-                Sprint 14 Planning
-              </h3>
-              <p className="text-xs text-[#4F657D] leading-relaxed">
-                Relative deadline resolution ("next Friday") and assignments for Priya & Arjun.
-              </p>
-            </div>
-            <div className="pt-3 mt-3 border-t border-[#D7E4F2] flex items-center justify-between text-[11px] text-[#57728E]">
-              <span className="font-mono">2026-11-14</span>
-              <span className="font-medium text-[#2C5278] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                Load transcript →
-              </span>
-            </div>
-          </button>
-
-          {/* Card 3: Pastel Terracotta / Apricot */}
-          <button
-            type="button"
-            onClick={() => loadPreset("meeting3")}
-            className="p-4.5 rounded-xl text-left bg-[#FDF1EB] border border-[#F4D5C7] hover:border-[#E8BCA9] transition-all cursor-pointer group flex flex-col justify-between shadow-xs"
-          >
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs text-[#9E5A44]">
-                <span className="font-mono font-semibold">03 / SCHEDULE SHIFT</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#FBE2D8] text-[#B93828] font-bold">
-                  SCHEDULE REVISION
-                </span>
-              </div>
-              <h3 className="font-serif text-lg text-[#1F1E1B] group-hover:text-[#B93828] transition-colors">
-                Executive Review
-              </h3>
-              <p className="text-xs text-[#7A4B3C] leading-relaxed">
-                Proposes advancing launch to April 2, testing autonomous contradiction detection against the Q4 Roadmap.
-              </p>
-            </div>
-            <div className="pt-3 mt-3 border-t border-[#F5DAD0] flex items-center justify-between text-[11px] text-[#9E5A44]">
-              <span className="font-mono">2026-11-21</span>
-              <span className="font-bold text-[#B93828] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-                Load transcript →
-              </span>
-            </div>
-          </button>
-        </div>
+        {/* Card 3: Filled with #D47255, no border, dark chocolate text */}
+        <button
+          type="button"
+          onClick={() => loadPreset("meeting3")}
+          className="p-5 rounded-2xl text-left bg-[#D47255] text-[#2A140E] hover:opacity-95 transition-all cursor-pointer group flex flex-col justify-between border-none shadow-lg"
+        >
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider block opacity-80">
+              03 / CONFLICT DEMO
+            </span>
+            <h3 className="text-base font-extrabold text-[#2A140E]">
+              Executive Review
+            </h3>
+            <p className="text-xs text-[#3A1B12] leading-relaxed font-medium">
+              Pivots launch to April 2, testing contradiction detection against Kickoff.
+            </p>
+          </div>
+          <div className="pt-3 mt-3 flex items-center justify-between text-xs font-bold text-[#2A140E]">
+            <span className="font-mono">2026-11-21</span>
+            <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+              Trigger Conflict →
+            </span>
+          </div>
+        </button>
       </div>
 
-      {/* Main Ingestion Desk */}
-      <form onSubmit={handleIngest} className="bg-[#FFFDF9] rounded-2xl border border-[#E5DDD0] p-6 sm:p-8 space-y-7 shadow-xs">
+      {/* Main Ingestion Form (Matte Card, Borderless) */}
+      <form onSubmit={handleIngest} className="bg-[#15161C] rounded-3xl p-6 sm:p-8 space-y-6 border-none shadow-xl">
         {error && (
-          <div className="p-3.5 rounded-xl bg-[#FDF1EC] border border-[#F5D2C4] text-xs text-[#B93828] flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="p-4 rounded-2xl bg-[#D47255] text-[#2A140E] text-xs font-bold flex items-center gap-2 border-none">
+            <AlertCircle className="w-4 h-4 shrink-0 text-[#2A140E]" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Title and Date Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="sm:col-span-2 space-y-1.5">
-            <label className="text-xs font-mono uppercase tracking-wider text-[#736B5E] font-medium flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-[#9E9585]" />
+            <label className="text-xs font-mono uppercase tracking-wider text-[#858997] font-semibold flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-[#858997]" />
               Meeting Subject
             </label>
             <input
@@ -236,13 +206,13 @@ export default function IngestPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Q4 Executive Strategy"
-              className="w-full px-3.5 py-2.5 text-sm bg-[#FAF7F0] border border-[#DDD4C3] rounded-xl text-[#1F1E1B] placeholder-[#A39B8B] focus:outline-none focus:border-[#D97757] focus:ring-1 focus:ring-[#D97757]/30 transition-colors"
+              className="w-full px-4 py-3 text-sm bg-[#1C1E26] rounded-2xl text-white placeholder-[#6B707F] border-none focus:outline-none focus:ring-2 focus:ring-[#D47255]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-mono uppercase tracking-wider text-[#736B5E] font-medium flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#9E9585]" />
+            <label className="text-xs font-mono uppercase tracking-wider text-[#858997] font-semibold flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#858997]" />
               Meeting Date
             </label>
             <input
@@ -250,7 +220,7 @@ export default function IngestPage() {
               required
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-sm bg-[#FAF7F0] border border-[#DDD4C3] rounded-xl text-[#1F1E1B] focus:outline-none focus:border-[#D97757] focus:ring-1 focus:ring-[#D97757]/30 transition-colors font-mono"
+              className="w-full px-4 py-3 text-sm bg-[#1C1E26] rounded-2xl text-white border-none focus:outline-none focus:ring-2 focus:ring-[#D47255] font-mono"
             />
           </div>
         </div>
@@ -258,19 +228,19 @@ export default function IngestPage() {
         {/* Source Selector & Input Area */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-mono uppercase tracking-wider text-[#736B5E] font-medium">
-              Transcript / Audio Input
+            <label className="text-xs font-mono uppercase tracking-wider text-[#858997] font-semibold">
+              Input Mode
             </label>
 
-            {/* Segmented Control */}
-            <div className="flex items-center p-1 bg-[#EBE4D5] rounded-xl text-xs font-sans">
+            {/* Seamless Segmented Control */}
+            <div className="flex items-center p-1 bg-[#1C1E26] rounded-2xl text-xs font-sans">
               <button
                 type="button"
                 onClick={() => setFormat("txt")}
-                className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer border-none ${
                   format === "txt"
-                    ? "bg-[#FFFDF9] text-[#1F1E1B] font-semibold shadow-xs"
-                    : "text-[#6B6354] hover:text-[#1F1E1B]"
+                    ? "bg-[#D47255] text-[#2A140E] font-bold shadow-md"
+                    : "text-[#858997] hover:text-white"
                 }`}
               >
                 Plain text
@@ -278,10 +248,10 @@ export default function IngestPage() {
               <button
                 type="button"
                 onClick={() => setFormat("vtt")}
-                className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer border-none ${
                   format === "vtt"
-                    ? "bg-[#FFFDF9] text-[#1F1E1B] font-semibold shadow-xs"
-                    : "text-[#6B6354] hover:text-[#1F1E1B]"
+                    ? "bg-[#D47255] text-[#2A140E] font-bold shadow-md"
+                    : "text-[#858997] hover:text-white"
                 }`}
               >
                 Zoom/Meet VTT
@@ -289,49 +259,37 @@ export default function IngestPage() {
               <button
                 type="button"
                 onClick={() => setFormat("audio")}
-                className={`px-3 py-1 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 border-none ${
                   format === "audio"
-                    ? "bg-[#D97757] text-white font-medium shadow-xs"
-                    : "text-[#6B6354] hover:text-[#1F1E1B]"
+                    ? "bg-[#D47255] text-[#2A140E] font-bold shadow-md"
+                    : "text-[#858997] hover:text-white"
                 }`}
               >
                 <Volume2 className="w-3.5 h-3.5" />
-                Audio recording
+                Audio (Whisper)
               </button>
             </div>
           </div>
 
-          {/* Conditional Audio vs Text Desk */}
+          {/* Conditional Audio vs Text Area */}
           {format === "audio" ? (
             <div className="space-y-4">
-              <div className="border border-[#E0D7C6] rounded-2xl p-8 text-center space-y-4 bg-[#FAF6EE]">
-                <div className="w-12 h-12 rounded-full bg-[#EAE2D2] flex items-center justify-center mx-auto text-[#6B6354]">
-                  <Upload className="w-5 h-5 text-[#8A7B69]" />
+              <div className="rounded-3xl p-8 text-center space-y-4 bg-[#1C1E26] border-none">
+                <div className="w-12 h-12 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center mx-auto shadow-md">
+                  <Upload className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1">
-                  <p className="font-serif text-lg text-[#1F1E1B]">
-                    {audioFile ? audioFile.name : "Select or drop meeting audio recording"}
+                  <p className="font-bold text-base text-white">
+                    {audioFile ? audioFile.name : "Select or drop audio recording"}
                   </p>
-                  <p className="text-xs text-[#827869] font-sans">
+                  <p className="text-xs text-[#858997]">
                     Speech-to-text with automatic speaker turns via Whisper (.mp3, .wav, .m4a, .webm)
                   </p>
                 </div>
 
-                {/* Subtle Acoustic Visualizer */}
-                <div className="flex items-center justify-center gap-1.5 py-1 h-8 opacity-80">
-                  <span className="w-1 h-3 bg-[#D97757] rounded-full" />
-                  <span className="w-1 h-5 bg-[#D97757] rounded-full" />
-                  <span className="w-1 h-2 bg-[#8C8474] rounded-full" />
-                  <span className="w-1 h-7 bg-[#D97757] rounded-full" />
-                  <span className="w-1 h-4 bg-[#1F1E1B] rounded-full" />
-                  <span className="w-1 h-6 bg-[#D97757] rounded-full" />
-                  <span className="w-1 h-3 bg-[#8C8474] rounded-full" />
-                  <span className="w-1 h-5 bg-[#D97757] rounded-full" />
-                </div>
-
                 <div>
-                  <label className="px-4 py-2 text-xs font-medium rounded-xl bg-white border border-[#D5CCBA] text-[#1F1E1B] hover:bg-[#F5EFE4] inline-block cursor-pointer transition-colors shadow-xs">
+                  <label className="px-5 py-2.5 text-xs font-bold rounded-2xl bg-[#D47255] text-[#2A140E] hover:opacity-90 inline-block cursor-pointer transition-all border-none">
                     Browse audio file
                     <input
                       type="file"
@@ -349,15 +307,15 @@ export default function IngestPage() {
               </div>
 
               {/* Sample recordings */}
-              <div className="flex flex-wrap items-center gap-2 text-xs text-[#736B5E]">
-                <span className="font-mono text-[11px]">Sample team recordings:</span>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#858997]">
+                <span className="font-mono text-[11px]">Sample audio files:</span>
                 <button
                   type="button"
                   onClick={() => handleSelectSampleAudio("Kickoff_Recording", "Product Kickoff Recording")}
-                  className={`px-3 py-1 rounded-lg border text-xs font-sans transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-sans transition-colors cursor-pointer border-none ${
                     selectedSampleAudio === "Kickoff_Recording"
-                      ? "border-[#D97757] bg-[#FDF1EB] text-[#B9472A] font-semibold"
-                      : "border-[#DDD4C3] bg-white hover:bg-[#FAF6EE] text-[#544D41]"
+                      ? "bg-[#D47255] text-[#2A140E] font-bold"
+                      : "bg-[#1C1E26] text-[#9FA4B2] hover:text-white"
                   }`}
                 >
                   Kickoff_Recording.mp3
@@ -365,10 +323,10 @@ export default function IngestPage() {
                 <button
                   type="button"
                   onClick={() => handleSelectSampleAudio("Sprint_Review", "Sprint Review Recording")}
-                  className={`px-3 py-1 rounded-lg border text-xs font-sans transition-colors cursor-pointer ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-sans transition-colors cursor-pointer border-none ${
                     selectedSampleAudio === "Sprint_Review"
-                      ? "border-[#D97757] bg-[#FDF1EB] text-[#B9472A] font-semibold"
-                      : "border-[#DDD4C3] bg-white hover:bg-[#FAF6EE] text-[#544D41]"
+                      ? "bg-[#D47255] text-[#2A140E] font-bold"
+                      : "bg-[#1C1E26] text-[#9FA4B2] hover:text-white"
                   }`}
                 >
                   Sprint_Review.wav
@@ -378,13 +336,13 @@ export default function IngestPage() {
           ) : (
             <div className="relative">
               <textarea
-                rows={10}
+                rows={9}
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
                 placeholder="Paste transcript with speaker attribution e.g.&#10;Arjun: We agreed to schedule launch for April 15.&#10;Priya: I will wrap up frontend components by next Friday."
-                className="w-full p-4 font-mono text-xs sm:text-sm bg-[#FAF7F0] border border-[#DDD4C3] rounded-2xl text-[#1F1E1B] placeholder-[#A39B8B] focus:outline-none focus:border-[#D97757] focus:ring-1 focus:ring-[#D97757]/30 transition-colors leading-relaxed"
+                className="w-full p-4 font-mono text-xs sm:text-sm bg-[#1C1E26] rounded-2xl text-white placeholder-[#6B707F] border-none focus:outline-none focus:ring-2 focus:ring-[#D47255] leading-relaxed"
               />
-              <div className="absolute bottom-3 right-3 text-[11px] font-mono text-[#8C8474]">
+              <div className="absolute bottom-3 right-3 text-[11px] font-mono text-[#6B707F]">
                 {transcript.split("\n").length} lines
               </div>
             </div>
@@ -392,24 +350,24 @@ export default function IngestPage() {
         </div>
 
         {/* Footer Action */}
-        <div className="pt-4 border-t border-[#EDE5D6] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-[#82796B] font-sans">
-            A human confirmation step is required before anything gets posted or committed.
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="text-xs text-[#858997] font-sans">
+            Human verification gate enforced before committing to memory.
           </span>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="btn-terracotta px-6 py-2.5 text-sm flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-xs"
+            className="w-full sm:w-auto px-7 py-3 rounded-2xl font-bold text-sm bg-[#D47255] text-[#2A140E] hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all border-none shadow-lg"
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin text-[#2A140E]" />
                 <span>{analysisStep || "Analyzing..."}</span>
               </>
             ) : (
               <>
-                <span>Analyze transcript & check memory</span>
+                <span>Analyze Transcript</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

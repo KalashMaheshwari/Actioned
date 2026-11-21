@@ -2,119 +2,74 @@
 
 :root {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Newsreader', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
   
-  /* Claude Inspired Editorial Warm Pastel Palette */
-  --color-canvas: #F5F0E6;
-  --color-paper: #FFFDF9;
-  --color-stone: #EFE9DC;
-  --color-sand: #E8E1D0;
-  --color-border: #E4DCCF;
-  --color-border-subtle: #ECE5D8;
-  --color-border-strong: #D5CBB9;
+  /* Workly / Aceagency Inspired Velvety Matte Dark Palette */
+  --color-canvas: #0E0F13;
+  --color-surface: #15161C;
+  --color-surface-hover: #1A1C24;
+  --color-surface-elevated: #1F212B;
+  --color-surface-subtle: #171820;
   
-  --color-ink: #1F1E1B;
-  --color-ink-muted: #6B6760;
-  --color-ink-faint: #9E9A90;
-
-  /* Terracotta Accent (Claude's Signature) */
-  --color-terracotta: #D97757;
-  --color-terracotta-hover: #C35D38;
-  --color-terracotta-subtle: #FDF5F1;
-  --color-terracotta-border: #F3D3C6;
-
-  /* Olive / Sage for Active Consensus */
-  --color-sage: #2D5A43;
-  --color-sage-subtle: #F1F6F3;
-  --color-sage-border: #D2E4DA;
-
-  /* Russet / Crimson for Contradiction Alerts */
-  --color-alert: #B93828;
-  --color-alert-subtle: #FDF3F1;
-  --color-alert-border: #F7D0C9;
+  /* The Signature Accent Fill (#D47255) with Dark Chocolate Brown Text */
+  --color-accent-fill: #D47255;
+  --color-accent-text: #2A140E;
+  
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #9FA4B2;
+  --color-text-muted: #6B707F;
+  --radius: 1rem;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: var(--color-canvas);
-  color: var(--color-ink);
+  color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
 }
 
-.font-serif {
-  font-family: var(--font-serif);
+/* Accent Fill Box (Specified by user: #D47255, no border, dark choco brown text) */
+.box-accent {
+  background-color: #D47255;
+  color: #2A140E;
+  border: none;
 }
 
-.font-sans {
-  font-family: var(--font-sans);
+.btn-accent {
+  background-color: #D47255;
+  color: #2A140E;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.875rem;
+  transition: opacity 150ms ease, transform 100ms ease;
 }
 
-.font-mono {
-  font-family: var(--font-mono);
+.btn-accent:hover {
+  opacity: 0.92;
 }
 
-/* Editorial Paper Card */
-.paper-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E8E6DF;
-  border-radius: 12px;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+.btn-accent:active {
+  transform: translateY(1px);
 }
 
-.paper-card:hover {
-  border-color: #D5D1C5;
+/* Matte Borderless Cards */
+.matte-card {
+  background-color: #15161C;
+  border-radius: 1.25rem;
+  border: none;
 }
 
-.paper-card-subtle {
-  background-color: #F8F7F2;
-  border: 1px solid #EAE7DE;
-  border-radius: 12px;
+.matte-card-subtle {
+  background-color: #1A1C24;
+  border-radius: 1rem;
+  border: none;
 }
 
-/* Conflict Memorandum Card */
-.memorandum-conflict {
-  background-color: #FDF5F2;
-  border: 1px solid #F3CEBF;
-  border-radius: 12px;
-}
-
-/* Quiet Tactile Buttons */
 button {
   cursor: pointer;
 }
 
-.btn-terracotta {
-  background-color: #D97757;
-  color: #FFFFFF;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: background-color 150ms ease, transform 100ms ease;
-}
-
-.btn-terracotta:hover {
-  background-color: #C35D38;
-}
-
-.btn-terracotta:active {
-  transform: translateY(0.5px);
-}
-
-.btn-paper {
-  background-color: #FFFFFF;
-  color: #1F1E1B;
-  border: 1px solid #E2DFD7;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: background-color 150ms ease, border-color 150ms ease;
-}
-
-.btn-paper:hover {
-  background-color: #F7F5EE;
-  border-color: #D1CDC2;
-}
-
-/* Custom Subtle Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -125,10 +80,10 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #DCD8CD;
+  background: #232530;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C5BFB2;
+  background: #2D303E;
 }

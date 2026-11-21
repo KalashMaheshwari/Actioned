@@ -1,25 +1,18 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Plus_Jakarta_Sans, Newsreader, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-sans",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-serif",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600"],
   variable: "--font-mono",
 });
 
@@ -37,18 +30,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable} dark`}
       suppressHydrationWarning
     >
       <body
-        className="min-h-screen bg-[#F5F0E6] text-[#1F1E1B] flex flex-col font-sans antialiased selection:bg-[#D97757]/20 selection:text-[#9A3816]"
+        className="min-h-screen bg-[#0E0F13] text-[#FFFFFF] flex font-sans antialiased selection:bg-[#D47255] selection:text-[#2A140E]"
         suppressHydrationWarning
       >
-        <div className="flex flex-col min-h-screen">
-          <Suspense fallback={null}>
-            <Sidebar />
-          </Suspense>
-          <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-16">
+        {/* Collapsible Left Sidebar */}
+        <Suspense fallback={null}>
+          <Sidebar />
+        </Suspense>
+
+        {/* Main Content Area */}
+        <div className="flex-1 min-w-0 pl-24 lg:pl-72 pr-4 sm:pr-8 py-8 transition-all duration-300">
+          <main className="max-w-4xl w-full mx-auto">
             {children}
           </main>
         </div>

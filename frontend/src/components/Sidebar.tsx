@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef, MouseEvent } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { checkBackendHealth, seedDemoData } from "@/lib/api";
 import {
@@ -10,8 +10,6 @@ import {
   BookOpen,
   Users,
   RotateCcw,
-  ChevronLeft,
-  ChevronRight,
   Search,
 } from "lucide-react";
 
@@ -27,12 +25,12 @@ export function Sidebar() {
   const [mounted, setMounted] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [cursorY, setCursorY] = useState<number>(0);
   const [isBackendHealthy, setIsBackendHealthy] = useState<boolean | null>(null);
   const [isResetting, setIsResetting] = useState(false);
 
-  // Smooth physics spring for cursor following hover tag
-  const springY = useSpring(0, { stiffness: 450, damping: 32 });
+  // High-performance 360-degree physics springs for cursor tracking
+  const springX = useSpring(0, { stiffness: 500, damping: 28, mass: 0.4 });
+  const springY = useSpring(0, { stiffness: 500, damping: 28, mass: 0.4 });
 
   useEffect(() => {
     setMounted(true);
@@ -44,10 +42,9 @@ export function Sidebar() {
   }, []);
 
   const handleMouseMoveItem = (e: MouseEvent<HTMLDivElement>, index: number) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const relativeY = e.clientY - rect.top;
-    setCursorY(relativeY);
-    springY.set(e.clientY);
+    // 360-degree cursor following: offset smoothly from mouse coordinates
+    springX.set(e.clientX + 18);
+    springY.set(e.clientY - 14);
     setHoveredIndex(index);
   };
 
@@ -90,6 +87,33 @@ export function Sidebar() {
 
   return (
     <>
+      {/* 360-Degree Cursor Following Floating Hover Tag */}
+      <AnimatePresence>
+        {hoveredIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              x: springX,
+              y: springY,
+              pointerEvents: "none",
+              zIndex: 9999,
+            }}
+            className="px-3.5 py-1.5 rounded-xl bg-[#D47255] text-[#2A140E] font-bold text-xs whitespace-nowrap shadow-2xl flex items-center gap-1.5 border-none select-none backdrop-blur-md"
+          >
+            <span>{navItems[hoveredIndex].label}</span>
+            <span className="text-[10px] font-mono opacity-80 uppercase tracking-wider">
+              • {navItems[hoveredIndex].badge}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.aside
         suppressHydrationWarning
         initial={false}
@@ -106,18 +130,19 @@ export function Sidebar() {
       >
         {/* Top Header & Navigation */}
         <div className="space-y-6" suppressHydrationWarning>
-          {/* Header Row */}
+          {/* Header Row: Click logo to smoothly toggle collapsed/expanded (No arrows!) */}
           <div
             className={`flex items-center transition-all ${
-              collapsed ? "justify-center" : "justify-between px-1"
+              collapsed ? "justify-center" : "justify-start px-1"
             }`}
             suppressHydrationWarning
           >
-            <Link
-              href="/"
-              className="flex items-center gap-3 group focus:outline-none"
+            <div
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              title={isCollapsed ? "Click to expand" : "Click to collapse"}
+              className="flex items-center gap-3 group focus:outline-none cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-lg shadow-[#D47255]/20 group-hover:scale-105 transition-transform duration-200">
+              <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-lg shadow-[#D47255]/25 group-hover:scale-105 active:scale-95 transition-all duration-200">
                 A
               </div>
               <AnimatePresence initial={false}>
@@ -138,36 +163,10 @@ export function Sidebar() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </Link>
-
-            {/* Collapse Button */}
-            {!collapsed && (
-              <button
-                type="button"
-                onClick={() => setIsCollapsed(true)}
-                title="Collapse sidebar"
-                className="w-7 h-7 rounded-xl bg-[#1C1F2B]/80 hover:bg-[#252837] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 border-none"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-            )}
+            </div>
           </div>
 
-          {/* Expand Toggle when Collapsed */}
-          {collapsed && (
-            <div className="flex justify-center" suppressHydrationWarning>
-              <button
-                type="button"
-                onClick={() => setIsCollapsed(false)}
-                title="Expand sidebar"
-                className="w-7 h-7 rounded-xl bg-[#1C1F2B]/80 hover:bg-[#252837] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 border-none"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-
-          {/* Search Mockup (Workly Glass style) */}
+          {/* Search Mockup (No cmd+k) */}
           <AnimatePresence initial={false}>
             {!collapsed && (
               <motion.div
@@ -183,11 +182,8 @@ export function Sidebar() {
                     type="text"
                     readOnly
                     placeholder="Search memory..."
-                    className="w-full pl-8 pr-12 py-2 text-xs rounded-xl bg-[#161822]/80 text-[#9FA4B2] placeholder-[#6B707F] border-none focus:outline-none shadow-inner"
+                    className="w-full pl-8 pr-4 py-2 text-xs rounded-xl bg-[#161822]/80 text-[#9FA4B2] placeholder-[#6B707F] border-none focus:outline-none shadow-inner"
                   />
-                  <span className="absolute right-2.5 top-2.5 text-[9px] font-mono text-[#6B707F] bg-[#10121A] px-1.5 py-0.5 rounded-md">
-                    ⌘K
-                  </span>
                 </div>
               </motion.div>
             )}
@@ -215,7 +211,7 @@ export function Sidebar() {
               return (
                 <div
                   key={item.href}
-                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseEnter={(e) => handleMouseMoveItem(e, index)}
                   onMouseMove={(e) => handleMouseMoveItem(e, index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="relative"
@@ -251,40 +247,6 @@ export function Sidebar() {
                       </span>
                     )}
                   </Link>
-
-                  {/* Cursor-Following Hover Tag (Floating Liquid Glass) */}
-                  {hoveredIndex === index && collapsed && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9, x: -8 }}
-                      animate={{
-                        opacity: 1,
-                        scale: 1,
-                        x: 0,
-                        y: cursorY - 18,
-                      }}
-                      exit={{ opacity: 0, scale: 0.9, x: -8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 28,
-                        mass: 0.5,
-                      }}
-                      style={{
-                        position: "absolute",
-                        left: "100%",
-                        marginLeft: "14px",
-                        top: 0,
-                        pointerEvents: "none",
-                        zIndex: 100,
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-[#D47255] text-[#2A140E] font-bold text-xs whitespace-nowrap shadow-2xl flex items-center gap-1.5 border-none"
-                    >
-                      <span>{item.label}</span>
-                      <span className="text-[10px] font-mono opacity-80 uppercase">
-                        • {item.badge}
-                      </span>
-                    </motion.div>
-                  )}
                 </div>
               );
             })}

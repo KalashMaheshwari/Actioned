@@ -306,10 +306,10 @@ export function Sidebar() {
                   suppressHydrationWarning
                 >
                   <span className="text-xs font-semibold text-white block truncate leading-tight">
-                    Acme Corp
+                    Acme Corp (Demo)
                   </span>
                   <span className="text-[10px] font-mono text-[#858997] block truncate">
-                    {isBackendHealthy ? "Memory Connected" : "Connecting..."}
+                    {isBackendHealthy ? "Vector Memory Active" : "Connecting..."}
                   </span>
                 </motion.div>
               )}
@@ -320,7 +320,7 @@ export function Sidebar() {
                 type="button"
                 onClick={handleResetWorkspace}
                 disabled={isResetting}
-                title="Reload demo dataset"
+                title="Reset demo data in ChromaDB & SQLite"
                 className="p-1 rounded-lg text-[#858997] hover:text-[#D47255] transition-colors cursor-pointer"
               >
                 <RotateCcw

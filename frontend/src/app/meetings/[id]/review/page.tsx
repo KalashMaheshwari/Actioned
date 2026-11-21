@@ -173,7 +173,7 @@ function ReviewContent({
             <span>Authorized & Committed to Permanent Memory</span>
           </div>
           <p className="text-xs text-[#9FA4B2] leading-relaxed max-w-2xl">
-            Decisions indexed in ChromaDB vector store. Deliverables dispatched to Trello, and 24h deadline alerts scheduled.
+            Decisions indexed in ChromaDB vector memory. Deliverables dispatched to Trello (Demo integration), and 24h pre-deadline notifications registered in APScheduler.
           </p>
           <div className="pt-2 flex items-center gap-3">
             <button

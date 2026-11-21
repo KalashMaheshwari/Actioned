@@ -112,82 +112,93 @@ export default function IngestPage() {
         </p>
       </div>
 
-      {/* 3 Scenario Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Card 1 */}
-        <button
-          type="button"
-          onClick={() => loadPreset("meeting1")}
-          className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
-        >
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-mono text-[#858997] block">
-              01 / BASELINE
-            </span>
-            <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
-              Roadmap Kickoff
-            </h3>
-            <p className="text-xs text-[#858997] leading-relaxed">
-              Sets initial deliverables and targets April 15 release.
-            </p>
-          </div>
-          <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
-            <span className="font-mono">2026-10-03</span>
-            <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
-              Load →
-            </span>
-          </div>
-        </button>
+      {/* Demo Scenario Quick-Loads */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-[#D47255] font-semibold bg-[#D47255]/10 px-2.5 py-1 rounded-full">
+            Demo Presets • Click to test PS 03 scenarios in 1-click
+          </span>
+          <span className="text-[11px] text-[#6B707F] font-mono hidden sm:inline">
+            Fast Verification Scenarios
+          </span>
+        </div>
 
-        {/* Card 2 */}
-        <button
-          type="button"
-          onClick={() => loadPreset("meeting2")}
-          className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
-        >
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-mono text-[#858997] block">
-              02 / SPRINT SYNC
-            </span>
-            <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
-              Sprint 14 Planning
-            </h3>
-            <p className="text-xs text-[#858997] leading-relaxed">
-              Relative deadlines ("next Friday") assigned to Priya & Arjun.
-            </p>
-          </div>
-          <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
-            <span className="font-mono">2026-11-14</span>
-            <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
-              Load →
-            </span>
-          </div>
-        </button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {/* Card 1 */}
+          <button
+            type="button"
+            onClick={() => loadPreset("meeting1")}
+            className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
+          >
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono text-[#858997] block">
+                DEMO 01 / BASELINE
+              </span>
+              <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
+                Roadmap Kickoff
+              </h3>
+              <p className="text-xs text-[#858997] leading-relaxed">
+                Sets initial deliverables and targets April 15 release.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
+              <span className="font-mono">2026-10-03</span>
+              <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
+                Load Preset →
+              </span>
+            </div>
+          </button>
 
-        {/* Card 3: Filled with #D47255, no border, dark chocolate text */}
-        <button
-          type="button"
-          onClick={() => loadPreset("meeting3")}
-          className="p-5 rounded-2xl text-left bg-[#D47255] text-[#2A140E] hover:opacity-95 transition-all cursor-pointer group flex flex-col justify-between border-none shadow-lg"
-        >
-          <div className="space-y-1.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider block opacity-80">
-              03 / CONFLICT DEMO
-            </span>
-            <h3 className="text-base font-extrabold text-[#2A140E]">
-              Executive Review
-            </h3>
-            <p className="text-xs text-[#3A1B12] leading-relaxed font-medium">
-              Pivots launch to April 2, testing contradiction detection against Kickoff.
-            </p>
-          </div>
-          <div className="pt-3 mt-3 flex items-center justify-between text-xs font-bold text-[#2A140E]">
-            <span className="font-mono">2026-11-21</span>
-            <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
-              Trigger Conflict →
-            </span>
-          </div>
-        </button>
+          {/* Card 2 */}
+          <button
+            type="button"
+            onClick={() => loadPreset("meeting2")}
+            className="p-5 rounded-2xl text-left bg-[#15161C] hover:bg-[#1A1C24] transition-all cursor-pointer group flex flex-col justify-between border-none"
+          >
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono text-[#858997] block">
+                DEMO 02 / SPRINT SYNC
+              </span>
+              <h3 className="text-base font-bold text-white group-hover:text-[#D47255] transition-colors">
+                Sprint 14 Planning
+              </h3>
+              <p className="text-xs text-[#858997] leading-relaxed">
+                Relative deadlines ("next Friday") assigned to Priya & Arjun.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 flex items-center justify-between text-xs text-[#858997]">
+              <span className="font-mono">2026-11-14</span>
+              <span className="font-semibold text-white group-hover:translate-x-0.5 transition-transform">
+                Load Preset →
+              </span>
+            </div>
+          </button>
+
+          {/* Card 3: Filled with #D47255, no border, dark chocolate text */}
+          <button
+            type="button"
+            onClick={() => loadPreset("meeting3")}
+            className="p-5 rounded-2xl text-left bg-[#D47255] text-[#2A140E] hover:opacity-95 transition-all cursor-pointer group flex flex-col justify-between border-none shadow-lg"
+          >
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider block opacity-80">
+                DEMO 03 / CONFLICT TRIGGER
+              </span>
+              <h3 className="text-base font-extrabold text-[#2A140E]">
+                Executive Review
+              </h3>
+              <p className="text-xs text-[#3A1B12] leading-relaxed font-medium">
+                Pivots launch to April 2, testing contradiction detection against Kickoff.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 flex items-center justify-between text-xs font-bold text-[#2A140E]">
+              <span className="font-mono">2026-11-21</span>
+              <span className="group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                Trigger Conflict →
+              </span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Main Ingestion Form (Matte Card, Borderless) */}
@@ -314,7 +325,7 @@ export default function IngestPage() {
 
               {/* Sample recordings */}
               <div className="flex flex-wrap items-center gap-2 text-xs text-[#858997]">
-                <span className="font-mono text-[11px]">Sample audio files:</span>
+                <span className="font-mono text-[11px] text-[#D47255]">Demo audio presets:</span>
                 <button
                   type="button"
                   onClick={() => handleSelectSampleAudio("Kickoff_Recording", "Product Kickoff Recording")}

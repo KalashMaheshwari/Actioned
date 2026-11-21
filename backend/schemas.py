@@ -43,13 +43,39 @@ class MeetingIngestionResponse(BaseModel):
     action_items: List[ExtractedActionItem]
     conflicts: List[DetectedConflict]
 
+class MeetingSummary(BaseModel):
+    id: int
+    title: str
+    date: str
+    created_at: Optional[str] = None
+    decisions_count: int = 0
+    action_items_count: int = 0
+    conflicts_count: int = 0
+
+class MeetingDetailResponse(BaseModel):
+    id: int
+    title: str
+    date: str
+    transcript_raw: str
+    format: str
+    created_at: Optional[str] = None
+    decisions: List[Decision] = []
+    action_items: List[ActionItem] = []
+    conflicts: List[Conflict] = []
+
 # --- Approval Models ---
 
 class MeetingApprovalRequest(BaseModel):
     approved_decision_ids: List[str] = Field(default_factory=list)
     approved_action_item_ids: List[str] = Field(default_factory=list)
-    edits: Optional[Dict[str, Dict[str, Any]]] = Field(default_factory=dict, description="e.g. {'a1': {'owner': 'Rahul', 'deadline': '2026-11-29'}}")
-    conflict_resolutions: Optional[Dict[str, str]] = Field(default_factory=dict, description="e.g. {'7': 'supersede'}")
+    edits: Optional[Dict[str, Dict[str, Any]]] = Field(
+        default_factory=dict,
+        description="e.g. {'a1': {'owner': 'Rahul', 'deadline': '2026-11-29', 'text': '...'}}"
+    )
+    conflict_resolutions: Optional[Dict[str, str]] = Field(
+        default_factory=dict,
+        description="e.g. {'d1_old': 'supersede'} or {'d1_old': 'dismiss'}"
+    )
 
 class MeetingApprovalResponse(BaseModel):
     status: str
@@ -70,6 +96,7 @@ class Decision(BaseModel):
     source_line: Optional[int] = None
     chroma_id: Optional[str] = None
     created_at: Optional[str] = None
+    meeting_title: Optional[str] = None
 
 class ActionItem(BaseModel):
     id: str
@@ -77,11 +104,18 @@ class ActionItem(BaseModel):
     text: str
     owner: Optional[str] = None
     deadline: Optional[str] = None
-    confidence: float
+    confidence: float = 1.0
     source_line: Optional[int] = None
     status: str = "proposed"  # proposed | approved | rejected | done
     tracker_task_id: Optional[str] = None
     created_at: Optional[str] = None
+    meeting_title: Optional[str] = None
+
+class ActionItemUpdateRequest(BaseModel):
+    text: Optional[str] = None
+    owner: Optional[str] = None
+    deadline: Optional[str] = None
+    status: Optional[str] = None  # proposed | approved | rejected | done
 
 class Conflict(BaseModel):
     id: str
@@ -100,3 +134,11 @@ class PersonDigestResponse(BaseModel):
     upcoming_deadlines: List[ActionItem]
     decisions_affecting_person: List[Decision]
     summary: Optional[str] = None
+
+# --- Audio Transcription Models ---
+
+class AudioTranscriptionResponse(BaseModel):
+    status: str
+    transcript: str
+    format: str = "txt"
+    meeting_ingestion: Optional[MeetingIngestionResponse] = None

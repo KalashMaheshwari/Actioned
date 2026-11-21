@@ -22,20 +22,48 @@ def _heuristic_verify_conflict(
 ) -> Tuple[bool, str]:
     """
     Heuristic contradiction check when ANTHROPIC_API_KEY is not set or for offline testing.
-    Checks date contradiction, opposing launch dates, or polar opposites.
+    Checks timeline contradiction, opposing tech choices, and scope reversals.
     """
     new_t = new_dec.text.lower()
     old_t = cand["text"].lower()
 
-    # Launch date conflict: both mention launch and different statements
-    if "launch" in new_t and "launch" in old_t:
-        if new_t != old_t:
-            return True, f"Both set the launch date, but to different dates ('{cand['text']}' vs '{new_dec.text}')."
+    if new_t == old_t:
+        return False, ""
 
-    # Target changes
-    if ("move to" in new_t or "moves to" in new_t or "change" in new_t) and ("launch" in new_t or "deadline" in new_t or "date" in new_t):
-        if new_t != old_t:
-            return True, f"Directly alters the previously agreed target in '{cand['text']}'."
+    # 1. Timeline / Target changes
+    if "launch" in new_t and "launch" in old_t:
+        return True, f"Both set the launch date, but to different targets ('{cand['text']}' vs '{new_dec.text}')."
+
+    if ("move to" in new_t or "moves to" in new_t or "postpone" in new_t or "reschedule" in new_t) and (
+        "launch" in new_t or "deadline" in new_t or "date" in new_t
+    ):
+        return True, f"Directly alters the previously agreed target in '{cand['text']}'."
+
+    # 2. Technology / Stack conflicts
+    tech_stacks = [
+        ["tailwind", "bootstrap", "material ui", "chakra"],
+        ["postgres", "postgresql", "dynamodb", "mongodb", "mysql", "sqlite"],
+        ["react", "vue", "angular", "svelte"],
+        ["fastapi", "django", "flask", "express"],
+        ["aws", "gcp", "azure", "cloudflare"],
+    ]
+    for stack in tech_stacks:
+        old_tech = [t for t in stack if t in old_t]
+        new_tech = [t for t in stack if t in new_t]
+        if old_tech and new_tech and set(old_tech) != set(new_tech):
+            return True, f"Contradicts technology stack choice: previously agreed '{old_tech[0]}' but now chooses '{new_tech[0]}'."
+
+    # 3. Scope reversals (include vs cut/drop)
+    words_old = set(re.findall(r"\w{4,}", old_t))
+    words_new = set(re.findall(r"\w{4,}", new_t))
+    overlap = words_old & words_new
+    if overlap:
+        pos_words = ["include", "add", "build", "support", "enable"]
+        neg_words = ["cut", "remove", "drop", "skip", "exclude", "disable"]
+        if (any(p in old_t for p in pos_words) and any(n in new_t for n in neg_words)) or (
+            any(n in old_t for n in neg_words) and any(p in new_t for p in pos_words)
+        ):
+            return True, f"Opposing scope decision regarding {', '.join(overlap)}: '{cand['text']}' vs '{new_dec.text}'."
 
     return False, ""
 

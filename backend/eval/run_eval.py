@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from services.extractor import extract_from_transcript
 from services.conflicts import detect_conflicts
-from services.memory import add_decision
+from services.memory import add_decision, save_meeting
 
 LABELED_DIR = Path(__file__).resolve().parent / "labeled"
 
@@ -58,11 +58,14 @@ def run_evaluation():
                     true_positive_conflicts += 1
                     break
 
+        # Save meeting in SQLite
+        real_meeting_id = save_meeting(title, date, transcript)
+
         # Simulate storing decisions in memory so subsequent meetings can conflict
         for d in decisions:
             add_decision(
                 id=f"eval_m{idx}_{d.id}",
-                meeting_id=idx,
+                meeting_id=real_meeting_id,
                 text=d.text,
                 owner=d.owner,
                 date=date,

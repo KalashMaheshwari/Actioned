@@ -50,6 +50,7 @@ def _heuristic_fallback_extract(
 
             if clean_text:
                 clean_text = clean_text[0].upper() + clean_text[1:]
+                clean_text = clean_text.rstrip(".")
 
             owner = speaker if speaker != "Unknown" else None
             decisions.append(ExtractedDecision(

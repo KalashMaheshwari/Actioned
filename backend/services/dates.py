@@ -24,8 +24,9 @@ def resolve_deadline(deadline_phrase: Optional[str], meeting_date_str: str) -> O
         return None
 
     phrase = deadline_phrase.strip().lower()
-    # Clean leading prepositions
-    phrase = re.sub(r"^(by|before|until|on|due|for)\s+", "", phrase).strip()
+    # Clean leading prepositions and noise words
+    phrase = re.sub(r"^(by|before|until|on|due|for|at)\s+", "", phrase).strip()
+    phrase = re.sub(r"\bthe\b\s*", "", phrase).strip()
 
     try:
         meeting_date = datetime.strptime(meeting_date_str, "%Y-%m-%d").date()

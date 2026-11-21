@@ -61,20 +61,22 @@ def parse_plain_text(transcript: str) -> List[Dict[str, Any]]:
 def parse_vtt(vtt_content: str) -> List[Dict[str, Any]]:
     """
     Parses Zoom / Google Meet WebVTT transcripts.
-    Falls back to plain text parser if webvtt parsing fails or format is mixed.
+    Extracts speaker attribution from <v Speaker> tags and timestamps.
+    Falls back to line-by-line parsing if webvtt parsing fails.
     """
+    parsed_lines = []
+    line_no = 1
+    speaker_regex = re.compile(r"<v\s+([^>]+)>(.*?)(?:</v>|$)", re.DOTALL)
+    plain_speaker_regex = re.compile(r"^([^:]+):\s*(.*)$")
+
     try:
         import webvtt
         buffer = io.StringIO(vtt_content)
-        vtt = webvtt.read_buffer(buffer)
-        parsed_lines = []
-        line_no = 1
-
-        speaker_regex = re.compile(r"^<v\s+([^>]+)>(.*)$")
-        plain_speaker_regex = re.compile(r"^([^:]+):\s*(.*)$")
+        vtt = webvtt.from_buffer(buffer)
 
         for caption in vtt:
-            raw_text = caption.text.strip()
+            # Use raw_text to preserve <v Speaker> tags
+            raw_text = getattr(caption, "raw_text", caption.text).strip()
             for line in raw_text.splitlines():
                 line = line.strip()
                 if not line:
@@ -84,7 +86,7 @@ def parse_vtt(vtt_content: str) -> List[Dict[str, Any]]:
                 text = line
 
                 # Check <v Speaker> tag standard in VTT
-                v_match = speaker_regex.match(line)
+                v_match = speaker_regex.search(line)
                 if v_match:
                     speaker = v_match.group(1).strip()
                     text = v_match.group(2).strip()
@@ -108,7 +110,34 @@ def parse_vtt(vtt_content: str) -> List[Dict[str, Any]]:
     except Exception:
         pass
 
-    # Fallback to plain text parser
+    # Regex-based fallback for VTT with <v Speaker> tags
+    for line in vtt_content.splitlines():
+        line = line.strip()
+        if not line or line.startswith("WEBVTT") or "-->" in line or line.isdigit():
+            continue
+        v_match = speaker_regex.search(line)
+        if v_match:
+            parsed_lines.append({
+                "line_no": line_no,
+                "speaker": v_match.group(1).strip(),
+                "timestamp": None,
+                "text": v_match.group(2).strip()
+            })
+            line_no += 1
+        else:
+            p_match = plain_speaker_regex.match(line)
+            if p_match and len(p_match.group(1)) <= 40:
+                parsed_lines.append({
+                    "line_no": line_no,
+                    "speaker": p_match.group(1).strip(),
+                    "timestamp": None,
+                    "text": p_match.group(2).strip()
+                })
+                line_no += 1
+
+    if parsed_lines:
+        return parsed_lines
+
     return parse_plain_text(vtt_content)
 
 def parse_transcript(transcript: str, format: str = "txt") -> List[Dict[str, Any]]:

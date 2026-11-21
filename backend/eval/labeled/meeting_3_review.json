@@ -1,0 +1,24 @@
+{
+  "title": "Planning Review",
+  "date": "2026-11-21",
+  "transcript": "Priya: Thanks everyone for joining. Big update on timeline: we decided that launch moves to March 15.\nRahul: Understood. I will update the launch checklist by next Friday.\nArjun: Wait, earlier we planned for April 2, but March 15 is the new date.",
+  "expected_decisions": [
+    {
+      "text": "Launch moves to March 15",
+      "owner": "Priya"
+    }
+  ],
+  "expected_action_items": [
+    {
+      "text": "Update the launch checklist",
+      "owner": "Rahul",
+      "deadline": "2026-11-27"
+    }
+  ],
+  "expected_conflicts": [
+    {
+      "old_decision_text": "Launch is scheduled for April 2",
+      "reason": "Both set the launch date, but to different dates."
+    }
+  ]
+}

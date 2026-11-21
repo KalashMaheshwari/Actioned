@@ -1,0 +1,23 @@
+{
+  "title": "Sprint Planning",
+  "date": "2026-11-14",
+  "transcript": "Priya: Okay team, let's review our backlog. Someone should look into the pricing page.\nRahul: I will update the user onboarding flow by Friday.\nPriya: Agreed to use Tailwind for the design system overhaul.",
+  "expected_decisions": [
+    {
+      "text": "Use Tailwind for the design system overhaul",
+      "owner": "Priya"
+    }
+  ],
+  "expected_action_items": [
+    {
+      "text": "Someone should look into the pricing page",
+      "owner": null
+    },
+    {
+      "text": "Update the user onboarding flow",
+      "owner": "Rahul",
+      "deadline": "2026-11-20"
+    }
+  ],
+  "expected_conflicts": []
+}

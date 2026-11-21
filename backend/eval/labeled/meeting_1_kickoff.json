@@ -1,0 +1,19 @@
+{
+  "title": "Kickoff Meeting",
+  "date": "2026-10-03",
+  "transcript": "Arjun: Welcome everyone. First big milestone: we decided that launch is scheduled for April 2.\nNeha: Great. I will prepare the cloud architecture document by next Friday.\nArjun: Sounds good. Let's make sure everyone reviews it.",
+  "expected_decisions": [
+    {
+      "text": "Launch is scheduled for April 2",
+      "owner": "Arjun"
+    }
+  ],
+  "expected_action_items": [
+    {
+      "text": "Prepare the cloud architecture document",
+      "owner": "Neha",
+      "deadline": "2026-10-09"
+    }
+  ],
+  "expected_conflicts": []
+}

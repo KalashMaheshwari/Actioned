@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-sans",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  title: "Actioned — Meetings That Remember What They Decided",
+  title: "Actioned — Autonomous Meeting Agent",
   description:
     "An autonomous meeting-to-execution agent with cross-meeting memory and conflict detection.",
 };
@@ -30,11 +30,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakarta.variable} ${jetbrainsMono.variable} dark`}
+      className={`${outfit.variable} ${spaceGrotesk.variable} dark`}
       suppressHydrationWarning
     >
       <body
-        className="min-h-screen bg-[#0E0F13] text-[#FFFFFF] flex font-sans antialiased selection:bg-[#D47255] selection:text-[#2A140E]"
+        className="min-h-screen bg-[#090A0E] text-[#FFFFFF] flex font-sans antialiased selection:bg-[#D47255] selection:text-[#2A140E]"
         suppressHydrationWarning
       >
         {/* Collapsible Left Sidebar */}

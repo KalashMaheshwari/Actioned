@@ -11,6 +11,7 @@ import {
   Users,
   RotateCcw,
   Search,
+  ChevronLeft,
 } from "lucide-react";
 
 interface NavItem {
@@ -117,6 +118,12 @@ export function Sidebar() {
       <motion.aside
         suppressHydrationWarning
         initial={false}
+        onClick={() => {
+          // Tapping anywhere in empty space of collapsed menu opens it
+          if (collapsed) {
+            setIsCollapsed(false);
+          }
+        }}
         animate={{
           width: collapsed ? 80 : 260,
         }}
@@ -126,23 +133,21 @@ export function Sidebar() {
           damping: 32,
           mass: 0.8,
         }}
-        className="fixed top-4 left-4 bottom-4 z-40 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none"
+        className={`fixed top-4 left-4 bottom-4 z-40 liquid-glass-sidebar rounded-[1.75rem] flex flex-col justify-between p-4 sm:p-5 select-none ${
+          collapsed ? "cursor-pointer" : ""
+        }`}
       >
         {/* Top Header & Navigation */}
         <div className="space-y-6" suppressHydrationWarning>
-          {/* Header Row: Click logo to smoothly toggle collapsed/expanded (No arrows!) */}
+          {/* Header Row: Dedicated button JUST for closing when open */}
           <div
             className={`flex items-center transition-all ${
-              collapsed ? "justify-center" : "justify-start px-1"
+              collapsed ? "justify-center" : "justify-between px-1"
             }`}
             suppressHydrationWarning
           >
-            <div
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              title={isCollapsed ? "Click to expand" : "Click to collapse"}
-              className="flex items-center gap-3 group focus:outline-none cursor-pointer"
-            >
-              <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-lg shadow-[#D47255]/25 group-hover:scale-105 active:scale-95 transition-all duration-200">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-2xl bg-[#D47255] text-[#2A140E] flex items-center justify-center font-extrabold text-base shrink-0 shadow-lg shadow-[#D47255]/25">
                 A
               </div>
               <AnimatePresence initial={false}>
@@ -164,6 +169,21 @@ export function Sidebar() {
                 )}
               </AnimatePresence>
             </div>
+
+            {/* Just for closing: subtle button when expanded */}
+            {!collapsed && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsCollapsed(true);
+                }}
+                title="Close menu"
+                className="w-7 h-7 rounded-xl bg-[#1C1F2B]/80 hover:bg-[#252837] text-[#9FA4B2] hover:text-white flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 border-none cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           {/* Search Mockup (No cmd+k) */}

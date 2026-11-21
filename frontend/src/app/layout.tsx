@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/Sidebar";
 
 const newsreader = Newsreader({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-serif",
 });

@@ -1,6 +1,6 @@
 import uuid
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, Path
+from fastapi import APIRouter, HTTPException, Path, UploadFile, File, Form
 
 from schemas import (
     MeetingCreateRequest,
@@ -26,6 +26,7 @@ from services.memory import (
 )
 from services.integrations import create_trello_card, send_slack_notification
 from services.scheduler import schedule_task_reminder
+from services.audio import transcribe_audio_file
 
 router = APIRouter(prefix="/meetings", tags=["Meetings"])
 
@@ -87,6 +88,30 @@ async def create_and_ingest_meeting(request: MeetingCreateRequest):
         decisions=decisions,
         action_items=action_items,
         conflicts=conflicts
+    )
+
+@router.post("/audio", response_model=MeetingIngestionResponse)
+async def create_and_ingest_audio_meeting(
+    file: UploadFile = File(...),
+    title: str = Form("Audio Meeting"),
+    date: str = Form("2026-11-21")
+):
+    """
+    Ingests an audio recording (.mp3, .wav, .m4a, .webm, .ogg),
+    transcribes it with speaker attribution via Whisper, and runs extraction
+    and conflict detection against persistent memory.
+    """
+    file_bytes = await file.read()
+    transcript = transcribe_audio_file(file_bytes, file.filename or "recording.mp3", meeting_title=title)
+
+    # Process transcribed speech through standard ingestion pipeline
+    return await create_and_ingest_meeting(
+        MeetingCreateRequest(
+            title=title,
+            date=date,
+            transcript=transcript,
+            format="txt"
+        )
     )
 
 @router.get("/{meeting_id}/conflicts")

@@ -1,26 +1,134 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Claude Inspired Editorial Warm Pastel Palette */
+  --color-canvas: #F5F0E6;
+  --color-paper: #FFFDF9;
+  --color-stone: #EFE9DC;
+  --color-sand: #E8E1D0;
+  --color-border: #E4DCCF;
+  --color-border-subtle: #ECE5D8;
+  --color-border-strong: #D5CBB9;
+  
+  --color-ink: #1F1E1B;
+  --color-ink-muted: #6B6760;
+  --color-ink-faint: #9E9A90;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Terracotta Accent (Claude's Signature) */
+  --color-terracotta: #D97757;
+  --color-terracotta-hover: #C35D38;
+  --color-terracotta-subtle: #FDF5F1;
+  --color-terracotta-border: #F3D3C6;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Olive / Sage for Active Consensus */
+  --color-sage: #2D5A43;
+  --color-sage-subtle: #F1F6F3;
+  --color-sage-border: #D2E4DA;
+
+  /* Russet / Crimson for Contradiction Alerts */
+  --color-alert: #B93828;
+  --color-alert-subtle: #FDF3F1;
+  --color-alert-border: #F7D0C9;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Editorial Paper Card */
+.paper-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E8E6DF;
+  border-radius: 12px;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.paper-card:hover {
+  border-color: #D5D1C5;
+}
+
+.paper-card-subtle {
+  background-color: #F8F7F2;
+  border: 1px solid #EAE7DE;
+  border-radius: 12px;
+}
+
+/* Conflict Memorandum Card */
+.memorandum-conflict {
+  background-color: #FDF5F2;
+  border: 1px solid #F3CEBF;
+  border-radius: 12px;
+}
+
+/* Quiet Tactile Buttons */
+button {
+  cursor: pointer;
+}
+
+.btn-terracotta {
+  background-color: #D97757;
+  color: #FFFFFF;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background-color 150ms ease, transform 100ms ease;
+}
+
+.btn-terracotta:hover {
+  background-color: #C35D38;
+}
+
+.btn-terracotta:active {
+  transform: translateY(0.5px);
+}
+
+.btn-paper {
+  background-color: #FFFFFF;
+  color: #1F1E1B;
+  border: 1px solid #E2DFD7;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.btn-paper:hover {
+  background-color: #F7F5EE;
+  border-color: #D1CDC2;
+}
+
+/* Custom Subtle Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DCD8CD;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C5BFB2;
 }

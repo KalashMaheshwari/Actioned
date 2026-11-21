@@ -3,9 +3,55 @@
 import { useEffect, useState } from "react";
 import { PersonDigestResponse } from "@/lib/types";
 import { getPersonDigest } from "@/lib/api";
-import { Users, Calendar, CheckSquare, Sparkles, Loader2, User } from "lucide-react";
+import {
+  Calendar,
+  CheckSquare,
+  Loader2,
+  Clock,
+  Bell,
+  Briefcase,
+  Users,
+  Sparkles,
+} from "lucide-react";
 
-const TEAM_MEMBERS = ["Arjun", "Priya", "Rahul", "Neha"];
+interface MemberProfile {
+  name: string;
+  role: string;
+  pastelBg: string;
+  pastelBorder: string;
+  textColor: string;
+}
+
+const TEAM_MEMBERS: MemberProfile[] = [
+  {
+    name: "Arjun",
+    role: "Backend Architecture",
+    pastelBg: "bg-[#EFF5F0]",
+    pastelBorder: "border-[#D5E6D8]",
+    textColor: "text-[#2D5A43]",
+  },
+  {
+    name: "Priya",
+    role: "Frontend & Design",
+    pastelBg: "bg-[#F2EFF8]",
+    pastelBorder: "border-[#DCD3EB]",
+    textColor: "text-[#543E78]",
+  },
+  {
+    name: "Rahul",
+    role: "Product Strategy",
+    pastelBg: "bg-[#FDF3EA]",
+    pastelBorder: "border-[#F4DFC8]",
+    textColor: "text-[#854E18]",
+  },
+  {
+    name: "Neha",
+    role: "QA & Reliability",
+    pastelBg: "bg-[#EEF4F7]",
+    pastelBorder: "border-[#D3E3EC]",
+    textColor: "text-[#2D5B73]",
+  },
+];
 
 export default function DigestPage() {
   const [selectedPerson, setSelectedPerson] = useState("Arjun");
@@ -19,7 +65,7 @@ export default function DigestPage() {
     try {
       const data = await getPersonDigest(person);
       setDigest(data);
-    } catch (err: any) {
+    } catch {
       setError(`Failed to load digest for ${person}.`);
     } finally {
       setIsLoading(false);
@@ -30,99 +76,139 @@ export default function DigestPage() {
     fetchDigest(selectedPerson);
   }, [selectedPerson]);
 
+  const currentProfile = TEAM_MEMBERS.find((m) => m.name === selectedPerson) || TEAM_MEMBERS[0];
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Users className="w-6 h-6 text-indigo-600" />
-            Weekly Person Digest
-          </h1>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-            Open items, upcoming deadlines, and decisions affecting each team member.
-          </p>
+    <div className="space-y-8 pb-12">
+      {/* Editorial Header */}
+      <div className="space-y-3 border-b border-[#E4DCCF] pb-5">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAE2D2] border border-[#DDD3BF] text-[11px] font-mono uppercase tracking-wider text-[#735A43] font-semibold">
+          <Users className="w-3.5 h-3.5 text-[#D97757]" />
+          <span>Team Synchronization & Weekly Digest</span>
         </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#1F1E1B] font-normal tracking-tight">
+            Weekly Executive Digest
+          </h1>
+          <span className="text-xs font-mono text-[#736B5E] bg-[#EAE2D2] px-3 py-1 rounded-lg border border-[#DDD3BF]">
+            Personal Dossier
+          </span>
+        </div>
+        <p className="text-sm text-[#615C52] max-w-xl">
+          An automated synthesis of open deliverables, upcoming deadlines, and active cross-meeting consensus affecting each team member.
+        </p>
       </div>
 
-      {/* Team Member Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-        {TEAM_MEMBERS.map((member) => (
-          <button
-            key={member}
-            onClick={() => setSelectedPerson(member)}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-              selectedPerson === member
-                ? "bg-indigo-600 text-white shadow-sm"
-                : "bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-750"
-            }`}
-          >
-            <User className="w-3.5 h-3.5" />
-            {member}
-          </button>
-        ))}
+      {/* Member Selector Cards with Distinct Pastel Colors */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {TEAM_MEMBERS.map((member) => {
+          const isSelected = selectedPerson === member.name;
+          return (
+            <button
+              key={member.name}
+              type="button"
+              onClick={() => setSelectedPerson(member.name)}
+              className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer shadow-xs ${
+                member.pastelBg
+              } ${member.pastelBorder} ${
+                isSelected
+                  ? "ring-2 ring-[#D97757] shadow-sm"
+                  : "opacity-80 hover:opacity-100"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className={`font-serif text-base font-medium ${member.textColor}`}>
+                  {member.name}
+                </span>
+                {isSelected && (
+                  <span className="w-2 h-2 rounded-full bg-[#D97757]" />
+                )}
+              </div>
+              <span className="text-[11px] font-mono text-[#6B6354] block mt-0.5">
+                {member.role}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Content */}
       {isLoading ? (
-        <div className="py-16 text-center space-y-2">
-          <Loader2 className="w-6 h-6 animate-spin mx-auto text-indigo-600" />
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">Compiling digest for {selectedPerson}...</p>
+        <div className="py-20 text-center space-y-2">
+          <Loader2 className="w-5 h-5 animate-spin mx-auto text-[#D97757]" />
+          <p className="text-xs text-[#736B5E] font-mono">Compiling digest for {selectedPerson}...</p>
         </div>
       ) : error ? (
-        <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-sm text-red-700 dark:text-red-400">
+        <div className="p-4 rounded-xl bg-[#FDF1EC] border border-[#F5D2C4] text-xs text-[#B93828]">
           {error}
         </div>
       ) : digest ? (
         <div className="space-y-6">
-          {/* AI Executive Summary */}
+          {/* AI Executive Summary Card in Warm Butter Pastel */}
           {digest.summary && (
-            <div className="p-5 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">
+            <div className="p-6 rounded-2xl bg-[#FCF9EE] border-l-4 border-l-[#D97757] border border-[#EFE5CB] space-y-2 shadow-xs">
+              <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-[#D97757] font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
-                AI Executive Digest
+                <span>AI Executive Synthesis • {selectedPerson}'s Scope</span>
               </div>
-              <p className="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium">
-                {digest.summary}
+              <p className="font-serif text-base sm:text-lg text-[#1F1E1B] leading-relaxed italic">
+                "{digest.summary}"
               </p>
+              <div className="text-xs text-[#736B5E] font-mono pt-1">
+                {digest.open_action_items.length} open deliverables • {digest.decisions_affecting_person.length} decisions owned
+              </div>
             </div>
           )}
 
-          {/* Open Action Items */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-emerald-600" />
-                Open Action Items ({digest.open_action_items.length})
-              </h2>
+          {/* Open Action Items in Pastel Blue Panel */}
+          <div className="p-6 rounded-2xl bg-[#F1F5FB] border border-[#D5E3F5] space-y-4 shadow-xs">
+            <div className="flex items-baseline justify-between border-b border-[#D8E6F7] pb-3">
+              <div>
+                <h2 className="font-serif text-xl text-[#1F1E1B]">
+                  Open Action Items ({digest.open_action_items.length})
+                </h2>
+                <p className="text-xs text-[#526B85] mt-0.5">
+                  Synchronized with Trello. Automated Slack reminders armed for 24h before deadline.
+                </p>
+              </div>
             </div>
 
             {digest.open_action_items.length === 0 ? (
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 italic">
+              <p className="text-xs text-[#6B7D94] italic py-4 text-center">
                 No active tasks assigned to {selectedPerson}.
               </p>
             ) : (
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {digest.open_action_items.map((act) => (
                   <div
                     key={act.id}
-                    className="p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-4"
+                    className="p-4 rounded-xl bg-white border border-[#D5E2F0] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
                   >
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                    <div className="space-y-1 flex-1">
+                      <p className="font-serif text-base text-[#1F1E1B]">
                         {act.text}
                       </p>
-                      {act.tracker_task_id && (
-                        <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-mono">
-                          Trello: {act.tracker_task_id}
+                      <div className="flex items-center gap-3 text-xs font-mono text-[#526B85]">
+                        {act.tracker_task_id && (
+                          <span>
+                            Trello Card: #{act.tracker_task_id}
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1 text-[#6B84A0]">
+                          <Bell className="w-3 h-3 text-[#526B85]" />
+                          24h pre-deadline alert scheduled
                         </span>
-                      )}
+                      </div>
                     </div>
+
                     {act.deadline && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-                        <Calendar className="w-3 h-3 text-zinc-600" />
-                        Due {act.deadline}
-                      </span>
+                      <div className="shrink-0">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#FAF6EE] border border-[#D5E2F0] text-xs font-mono text-[#2C5278] font-medium">
+                          <Clock className="w-3.5 h-3.5 text-[#526B85]" />
+                          Due {act.deadline}
+                        </span>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -130,28 +216,33 @@ export default function DigestPage() {
             )}
           </div>
 
-          {/* Decisions Affecting Person */}
-          <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-5 shadow-sm space-y-4">
-            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-indigo-600" />
-              Active Decisions Owned by {selectedPerson} ({digest.decisions_affecting_person.length})
-            </h2>
+          {/* Active Decisions Owned in Pastel Sage Panel */}
+          <div className="p-6 rounded-2xl bg-[#F2F7F4] border border-[#D7E8DC] space-y-4 shadow-xs">
+            <div className="border-b border-[#D8EADE] pb-3">
+              <h2 className="font-serif text-xl text-[#1F1E1B]">
+                Active Decisions Owned by {selectedPerson} ({digest.decisions_affecting_person.length})
+              </h2>
+              <p className="text-xs text-[#526D59] mt-0.5">
+                Consensus recorded in permanent memory where {selectedPerson} is the designated owner.
+              </p>
+            </div>
 
             {digest.decisions_affecting_person.length === 0 ? (
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 italic">
-                No active decisions currently owned by {selectedPerson}.
+              <p className="text-xs text-[#63806B] italic py-4 text-center">
+                No active decisions currently attributed to {selectedPerson}.
               </p>
             ) : (
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {digest.decisions_affecting_person.map((dec) => (
                   <div
                     key={dec.id}
-                    className="p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-4"
+                    className="p-4 rounded-xl bg-white border border-[#D2E4D7] flex items-center justify-between gap-4 shadow-xs"
                   >
-                    <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                    <p className="font-serif text-base text-[#1F1E1B]">
                       {dec.text}
                     </p>
-                    <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                    <span className="text-xs font-mono text-[#526D59] shrink-0 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-[#88A691]" />
                       {dec.date}
                     </span>
                   </div>

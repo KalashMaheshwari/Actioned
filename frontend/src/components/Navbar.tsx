@@ -2,13 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { checkBackendHealth } from "@/lib/api";
-import { ShieldCheck, ShieldAlert, Sparkles, BookOpen, Clock, Users } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { checkBackendHealth, seedDemoData } from "@/lib/api";
+import { ChevronDown, RotateCcw, Database, Check } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
   const [isBackendHealthy, setIsBackendHealthy] = useState<boolean | null>(null);
+  const [isResetting, setIsResetting] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     checkBackendHealth().then(setIsBackendHealthy);
@@ -18,72 +22,136 @@ export function Navbar() {
     return () => clearInterval(interval);
   }, []);
 
-  const navItems = [
-    { href: "/", label: "Ingest Meeting", icon: Sparkles },
-    { href: "/decisions", label: "Decision Memory", icon: BookOpen },
-    { href: "/digest", label: "Team Digest", icon: Users },
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleResetWorkspace = async () => {
+    setIsResetting(true);
+    try {
+      await seedDemoData();
+      setResetDone(true);
+      setTimeout(() => {
+        setResetDone(false);
+        setIsMenuOpen(false);
+      }, 1500);
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
+        window.location.reload();
+      }
+    } catch {
+      alert("Failed to reset workspace. Ensure backend is running at http://localhost:8000");
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  const navLinks = [
+    { href: "/", label: "Ingest Meeting" },
+    { href: "/decisions", label: "Decision Memory" },
+    { href: "/digest", label: "Team Digest" },
   ];
 
   return (
-    <header className="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="border-b border-[#E6DFD1] bg-[#F5F0E6]/95 backdrop-blur-md sticky top-0 z-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-              A
-            </div>
-            <div>
-              <span className="font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100">
-                Actioned
-              </span>
-              <span className="hidden sm:inline-block ml-2 text-xs font-medium text-zinc-600 dark:text-zinc-400 border-l border-zinc-300 dark:border-zinc-700 pl-2">
-                Cross-Meeting Memory
-              </span>
-            </div>
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="font-serif text-2xl font-normal tracking-tight text-[#1F1E1B] group-hover:text-[#D97757] transition-colors">
+              Actioned
+            </span>
+            <span className="text-xs text-[#D97757] font-mono tracking-widest font-semibold">
+              ●
+            </span>
           </Link>
+
+          {/* Nav Links */}
+          <nav className="hidden sm:flex items-center gap-1">
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                    isActive
+                      ? "bg-[#EAE2D2] text-[#1F1E1B] font-semibold"
+                      : "text-[#6B6354] hover:text-[#1F1E1B] hover:bg-[#EFE9DC]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-1 sm:gap-2">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-400"
-                    : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-900"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Right Actions: Workspace Selector */}
+        <div className="flex items-center gap-3" ref={menuRef}>
+          {/* Status Indicator */}
+          <div className="hidden md:flex items-center gap-1.5 text-xs text-[#736B5E] font-sans">
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isBackendHealthy ? "bg-[#3F7552]" : "bg-[#B87A28]"
+              }`}
+            />
+            <span>{isBackendHealthy ? "Active" : "Connecting"}</span>
+          </div>
 
-        {/* Health status pill */}
-        <div className="flex items-center gap-2">
-          {isBackendHealthy === null ? (
-            <span className="inline-flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-              <span className="w-2 h-2 rounded-full bg-zinc-300 animate-pulse" />
-              Connecting...
-            </span>
-          ) : isBackendHealthy ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-              API Connected
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
-              Offline
-            </span>
-          )}
+          <div className="h-4 w-px bg-[#DDD4C3] hidden md:block" />
+
+          {/* Workspace Menu */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[#EAE2D2] border border-[#DDD3BF] text-[#1F1E1B] hover:bg-[#E4D9C7] flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <span>Acme Workspace</span>
+              <ChevronDown className="w-3.5 h-3.5 text-[#736B5E]" />
+            </button>
+
+            {isMenuOpen && (
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-[#E5DDD0] shadow-lg py-2 z-50 text-xs">
+                <div className="px-3 py-1.5 border-b border-[#F0EEE7]">
+                  <p className="font-semibold text-[#1F1E1B]">Acme Corp</p>
+                  <p className="text-[11px] text-[#736B5E] font-mono">4 active team members</p>
+                </div>
+
+                <div className="px-3 py-2 text-[11px] text-[#736B5E] border-b border-[#F0EEE7] space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span>Memory Engine:</span>
+                    <span className="font-mono text-[#2D5A43] font-medium">ChromaDB Online</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Task Integration:</span>
+                    <span className="font-mono text-[#1F1E1B]">Trello Connected</span>
+                  </div>
+                </div>
+
+                <div className="p-1">
+                  <button
+                    type="button"
+                    onClick={handleResetWorkspace}
+                    disabled={isResetting}
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-[#FAF6EE] text-[#736B5E] hover:text-[#1F1E1B] flex items-center justify-between transition-colors cursor-pointer"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <RotateCcw className={`w-3 h-3 ${isResetting ? "animate-spin text-[#D97757]" : ""}`} />
+                      <span>Reload Workspace Data</span>
+                    </span>
+                    {resetDone && <Check className="w-3.5 h-3.5 text-[#2D5A43]" />}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

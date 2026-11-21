@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Plus_Jakarta_Sans, Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
+import { Sidebar } from "@/components/Sidebar";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -45,10 +45,10 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <div className="flex flex-col min-h-screen">
-          <Suspense fallback={<div className="h-16 border-b border-[#E6DFD1] bg-[#F5F0E6]" />}>
-            <Navbar />
+          <Suspense fallback={null}>
+            <Sidebar />
           </Suspense>
-          <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-16">
             {children}
           </main>
         </div>
